@@ -13,8 +13,8 @@
 
         <!-- Analyzers (versions are defined here, references are added in Directory.Build.props) -->
         <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
-        <PackageVersion Include="Meziantou.Analyzer" Version="3.0.109" />
+        <PackageVersion Include="Meziantou.Analyzer" Version="3.0.44" />
         <PackageVersion Include="AsyncFixer" Version="2.1.0" />
-        <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.27.0.140913s" />
+        <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.24.0.138807" />
     </ItemGroup>
 </Project>

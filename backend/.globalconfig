@@ -1,0 +1,46 @@
+is_global = true
+
+# All rules in the security category are treated as errors
+dotnet_analyzer_diagnostic.category-security.severity = error
+
+# CA2007: ConfigureAwait is unnecessary in ASP.NET Core
+# (the framework manages the synchronization context itself)
+dotnet_diagnostic.CA2007.severity = none
+
+# CA1062: null argument validation is handled by nullable reference types
+dotnet_diagnostic.CA1062.severity = none
+
+# CA1812: uninstantiated classes — false positives for DI-managed classes
+dotnet_diagnostic.CA1812.severity = none
+
+# CA1034: nested types — in vertical slice architecture, a single file may contain multiple types (Command/Handler)
+dotnet_diagnostic.CA1034.severity = none
+
+# MA0004: ConfigureAwait is unnecessary in ASP.NET Core
+dotnet_diagnostic.MA0004.severity = none
+
+# MA0048: file name must match type name — conflicts with vertical slice architecture (multiple types per file)
+dotnet_diagnostic.MA0048.severity = none
+
+# MA0051: method length — use case handlers are intentionally long
+dotnet_diagnostic.MA0051.severity = none
+
+# MA0053: sealed classes — too aggressive for DDD entities
+dotnet_diagnostic.MA0053.severity = none
+
+# RCS1090: ConfigureAwait is unnecessary in ASP.NET Core
+dotnet_diagnostic.RCS1090.severity = none
+
+# AsyncFixer01: removing async/await changes exception behavior in middleware
+dotnet_diagnostic.AsyncFixer01.severity = none
+
+# S1135: TODO/FIXME comments are markers, not bugs
+dotnet_diagnostic.S1135.severity = none
+
+# S1144: unused private members — false positives for EF shadow properties
+dotnet_diagnostic.S1144.severity = none
+
+# Rules enforced more strictly than the defaults:
+dotnet_diagnostic.S1125.severity = error  # Redundant Boolean literal
+dotnet_diagnostic.S6673.severity = error  # Serilog template placeholder order
+dotnet_diagnostic.S108.severity  = error  # Empty catch block without a comment=
