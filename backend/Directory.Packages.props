@@ -1,8 +1,8 @@
 <Project>
     <PropertyGroup>
-        <!-- Включаем центральное управление версиями -->
+        <!-- Enable central package version management -->
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-        <!-- Транзитивные зависимости тоже закрепляются -->
+        <!-- Pin transitive dependencies as well -->
         <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     </PropertyGroup>
 
@@ -11,7 +11,7 @@
         <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
         <PackageVersion Include="Scalar.AspNetCore" Version="2.16.4" />
 
-        <!-- Анализаторы (версии здесь, подключение в Directory.Build.props) -->
+        <!-- Analyzers (versions are defined here, references are added in Directory.Build.props) -->
         <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
         <PackageVersion Include="Meziantou.Analyzer" Version="3.0.109" />
         <PackageVersion Include="AsyncFixer" Version="2.1.0" />
