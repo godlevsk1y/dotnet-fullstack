@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\DirectoryService.Contracts\DirectoryService.Contracts.csproj" />
+    <ProjectReference Include="..\DirectoryService.Core\DirectoryService.Core.csproj" />
+    <ProjectReference Include="..\DirectoryService.Domain\DirectoryService.Domain.csproj" />
+    <ProjectReference Include="..\DirectoryService.Infrastructure.Postgres\DirectoryService.Infrastructure.Postgres.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+
+</Project>
