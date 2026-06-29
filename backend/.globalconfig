@@ -31,6 +31,9 @@ dotnet_diagnostic.MA0053.severity = none
 # RCS1090: ConfigureAwait is unnecessary in ASP.NET Core
 dotnet_diagnostic.RCS1090.severity = none
 
+# RCS1037: no need on removing whitespaces in empty rows
+dotnet_diagnostic.RCS1037.severity = none
+
 # AsyncFixer01: removing async/await changes exception behavior in middleware
 dotnet_diagnostic.AsyncFixer01.severity = none
 
