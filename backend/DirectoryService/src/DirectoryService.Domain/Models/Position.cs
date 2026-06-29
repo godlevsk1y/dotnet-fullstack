@@ -13,6 +13,10 @@ public class Position
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
+        Id = Guid.NewGuid();
         Name = name;
+        
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 }

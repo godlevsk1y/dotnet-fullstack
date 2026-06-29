@@ -17,6 +17,8 @@ public class Location
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
+        Id = Guid.NewGuid();
+        
         Name = name;
         Address = address;
         
