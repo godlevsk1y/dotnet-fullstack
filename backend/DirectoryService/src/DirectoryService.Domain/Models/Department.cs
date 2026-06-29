@@ -1,3 +1,5 @@
+using DirectoryService.Domain.ValueObjects;
+
 namespace DirectoryService.Domain.Models;
 
 public class Department
@@ -6,7 +8,7 @@ public class Department
 
     public string Name { get; private set; }
 
-    public string Slug { get; private set; }
+    public Slug Slug { get; private set; }
 
     public string Path { get; private set; }
     
@@ -16,10 +18,9 @@ public class Department
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
-    public Department(string name, string slug, Department? parent)
+    public Department(string name, Slug slug, Department? parent)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
         
         Id = Guid.NewGuid();
         Name = name;
@@ -30,6 +31,6 @@ public class Department
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
 
-        Path = Parent is null ? slug : $"{Parent.Path}/{slug}";
+        Path = Parent is null ? slug.Value : $"{Parent.Path}/{slug}";
     }
 }
