@@ -1,3 +1,5 @@
+using DirectoryService.Domain.Ids;
+
 namespace DirectoryService.Domain.Models;
 
 /// <summary>
@@ -37,14 +39,14 @@ public class DepartmentLocation
     /// <summary>
     /// Gets the unique identifier of the associated department.
     /// </summary>
-    /// <value>A <see cref="Guid"/> referencing the <see cref="Department"/> entity.</value>
-    public Guid DepartmentId { get; private set; }
+    /// <value>A <see cref="DepartmentId"/> referencing the <see cref="Department"/> entity.</value>
+    public DepartmentId DepartmentId { get; private set; }
     
     /// <summary>
     /// Gets the unique identifier of the associated location.
     /// </summary>
-    /// <value>A <see cref="Guid"/> referencing the <see cref="Location"/> entity.</value>
-    public Guid LocationId { get; private set; }
+    /// <value>A <see cref="LocationId"/> referencing the <see cref="Location"/> entity.</value>
+    public LocationId LocationId { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether this is the primary location for the department.
@@ -68,7 +70,7 @@ public class DepartmentLocation
     /// A value indicating whether this is the primary location for the department.
     /// Defaults to <c>false</c>.
     /// </param>
-    public DepartmentLocation(Guid departmentId, Guid locationId, bool isPrimary = false)
+    public DepartmentLocation(DepartmentId departmentId, LocationId locationId, bool isPrimary = false)
     {
         Id = Guid.NewGuid();
         DepartmentId = departmentId;

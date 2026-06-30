@@ -1,3 +1,4 @@
+using DirectoryService.Domain.Ids;
 using DirectoryService.Domain.ValueObjects;
 
 namespace DirectoryService.Domain.Models;
@@ -40,8 +41,8 @@ public class Location
     /// <summary>
     /// Gets the unique identifier for the location.
     /// </summary>
-    /// <value>A <see cref="Guid"/> that uniquely identifies this location.</value>
-    public Guid Id { get; private set; }
+    /// <value>A <see cref="LocationId"/> that uniquely identifies this location.</value>
+    public LocationId Id { get; private set; }
     
     /// <summary>
     /// Gets the display name of the location.
@@ -84,7 +85,7 @@ public class Location
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
-        Id = Guid.NewGuid();
+        Id = new LocationId(Guid.NewGuid());
         
         Name = name;
         Address = address;

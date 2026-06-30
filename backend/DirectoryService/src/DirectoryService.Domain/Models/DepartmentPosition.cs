@@ -1,3 +1,5 @@
+using DirectoryService.Domain.Ids;
+
 namespace DirectoryService.Domain.Models;
 
 /// <summary>
@@ -36,21 +38,21 @@ public class DepartmentPosition
     /// <summary>
     /// Gets the unique identifier of the associated department.
     /// </summary>
-    /// <value>A <see cref="Guid"/> referencing the <see cref="Department"/> entity.</value>
-    public Guid DepartmentId { get; private set; }
+    /// <value>A <see cref="DepartmentId"/> referencing the <see cref="Department"/> entity.</value>
+    public DepartmentId DepartmentId { get; private set; }
     
     /// <summary>
     /// Gets the unique identifier of the associated position.
     /// </summary>
-    /// <value>A <see cref="Guid"/> referencing the <see cref="Position"/> entity.</value>
-    public Guid PositionId { get; private set; }
+    /// <value>A <see cref="PositionId"/> referencing the <see cref="Position"/> entity.</value>
+    public PositionId PositionId { get; private set; }
     
     /// <summary>
     /// Initializes a new instance of the <see cref="DepartmentPosition"/> class.
     /// </summary>
     /// <param name="departmentId">The unique identifier of the department.</param>
     /// <param name="positionId">The unique identifier of the position.</param>
-    public DepartmentPosition(Guid departmentId, Guid positionId)
+    public DepartmentPosition(DepartmentId departmentId, PositionId positionId)
     {
         Id = Guid.NewGuid();
         DepartmentId = departmentId;

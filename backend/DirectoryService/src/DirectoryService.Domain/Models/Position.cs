@@ -1,3 +1,5 @@
+using DirectoryService.Domain.Ids;
+
 namespace DirectoryService.Domain.Models;
 
 /// <summary>
@@ -26,8 +28,8 @@ public class Position
     /// <summary>
     /// Gets the unique identifier for the position.
     /// </summary>
-    /// <value>A <see cref="Guid"/> that uniquely identifies this position.</value>
-    public Guid Id { get; private set; }
+    /// <value>A <see cref="PositionId"/> that uniquely identifies this position.</value>
+    public PositionId Id { get; private set; }
 
     /// <summary>
     /// Gets the name of the position.
@@ -62,7 +64,7 @@ public class Position
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
-        Id = Guid.NewGuid();
+        Id = new PositionId(Guid.NewGuid());
         Name = name;
         
         CreatedAt = DateTime.UtcNow;
