@@ -1,4 +1,5 @@
 using DirectoryService.Domain.ValueObjects;
+using Path = DirectoryService.Domain.ValueObjects.Path;
 
 namespace DirectoryService.Domain.Models;
 
@@ -68,14 +69,14 @@ public class Department
     /// Gets the full hierarchical path of the department.
     /// </summary>
     /// <value>
-    /// A string representing the full path from the root department to this department,
+    /// A value object representing the full path from the root department to this department,
     /// with each segment separated by a forward slash (e.g., "root/child/grandchild").
     /// </value>
     /// <remarks>
     /// The path is automatically constructed based on the parent department's path
     /// and the current department's slug. For root departments, the path equals the slug.
     /// </remarks>
-    public string Path { get; private set; }
+    public Path Path { get; private set; }
     
     /// <summary>
     /// Gets the unique identifier of the parent department, if any.
@@ -118,7 +119,7 @@ public class Department
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="name"/> is null or whitespace.
     /// </exception>
-    public Department(string name, Slug slug, Department? parent)
+    public Department(string name, Slug slug, Department? parent = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
@@ -131,6 +132,6 @@ public class Department
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
 
-        Path = Parent is null ? slug.Value : $"{Parent.Path}/{slug}";
+        Path = Parent is null ? new Path(slug) : Parent.Path.Append(slug);
     }
 }

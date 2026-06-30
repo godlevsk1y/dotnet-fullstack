@@ -8,8 +8,8 @@ namespace DirectoryService.Domain.ValueObjects;
 /// <remarks>
 /// <para>
 /// The <see cref="Address"/> value object encapsulates all the geographical information 
-/// needed to identify a physical location. It is an immutable value object, meaning 
-/// that once created, its properties cannot be changed.
+/// needed to identify a physical location. It is an immutable value object (a <c>record</c>), 
+/// meaning that once created, its properties cannot be changed.
 /// </para>
 /// <para>
 /// This value object is used by the <see cref="Location"/> entity to represent 
@@ -41,49 +41,49 @@ public record Address
     /// </summary>
     /// <value>A string representing the country name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string Country { get; private set; }
+    public string Country { get; }
     
     /// <summary>
     /// Gets the region, state, or province of the address.
     /// </summary>
     /// <value>A string representing the region, state, or province name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string Region { get; private set; }
+    public string Region { get; }
     
     /// <summary>
     /// Gets the city of the address.
     /// </summary>
     /// <value>A string representing the city name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string City { get; private set; }
+    public string City { get; }
     
     /// <summary>
     /// Gets the district or neighborhood of the address.
     /// </summary>
     /// <value>A string representing the district or neighborhood name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string District { get; private set; }
+    public string District { get; }
     
     /// <summary>
     /// Gets the street name of the address.
     /// </summary>
     /// <value>A string representing the street name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string Street { get; private set; }
+    public string Street { get; }
     
     /// <summary>
     /// Gets the house or building number of the address.
     /// </summary>
     /// <value>A string representing the house or building number.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string HouseNumber { get; private set; }
+    public string HouseNumber { get; }
     
     /// <summary>
     /// Gets the postal or ZIP code of the address.
     /// </summary>
     /// <value>A string representing the postal or ZIP code.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string PostalCode { get; private set; }
+    public string PostalCode { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Address"/> value object.
