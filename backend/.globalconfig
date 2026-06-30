@@ -46,4 +46,7 @@ dotnet_diagnostic.S1144.severity = none
 # Rules enforced more strictly than the defaults:
 dotnet_diagnostic.S1125.severity = error  # Redundant Boolean literal
 dotnet_diagnostic.S6673.severity = error  # Serilog template placeholder order
-dotnet_diagnostic.S108.severity  = error  # Empty catch block without a comment=
+dotnet_diagnostic.S108.severity  = error  # Empty catch block without a comment
+
+# IDE0290: use primary constructor – no need in this
+dotnet_diagnostic.IDE0290.severity = none
