@@ -1,20 +1,19 @@
 <Project>
-    <PropertyGroup>
-        <!-- Enable central package version management -->
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-        <!-- Pin transitive dependencies as well -->
-        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <!-- HTTP / OpenAPI -->
-        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
-        <PackageVersion Include="Scalar.AspNetCore" Version="2.16.4" />
-
-        <!-- Analyzers (versions are defined here, references are added in Directory.Build.props) -->
-        <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
-        <PackageVersion Include="Meziantou.Analyzer" Version="3.0.44" />
-        <PackageVersion Include="AsyncFixer" Version="2.1.0" />
-        <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.24.0.138807" />
-    </ItemGroup>
+  <PropertyGroup>
+    <!-- Enable central package version management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- Pin transitive dependencies as well -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- HTTP / OpenAPI -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.16.4" />
+    <!-- Analyzers (versions are defined here, references are added in Directory.Build.props) -->
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
+    <PackageVersion Include="Meziantou.Analyzer" Version="3.0.44" />
+    <PackageVersion Include="AsyncFixer" Version="2.1.0" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.24.0.138807" />
+  </ItemGroup>
 </Project>
