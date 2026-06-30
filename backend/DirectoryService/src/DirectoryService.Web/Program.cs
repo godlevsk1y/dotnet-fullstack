@@ -6,7 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString(nameof(DirectoryServiceDbContext));
 
-builder.Services.AddDbContext<DirectoryServiceDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddScoped<DirectoryServiceDbContext>(
+    _ => new DirectoryServiceDbContext(connectionString!)
+);
 
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
