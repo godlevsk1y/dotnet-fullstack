@@ -2,9 +2,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DirectoryService.Core\DirectoryService.Core.csproj" />
+    <ProjectReference Include="..\DirectoryService.Domain\DirectoryService.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
   </ItemGroup>
 
