@@ -8,8 +8,8 @@ namespace DirectoryService.Domain.ValueObjects;
 /// <remarks>
 /// <para>
 /// The <see cref="Address"/> value object encapsulates all the geographical information 
-/// needed to identify a physical location. It is an immutable value object, meaning 
-/// that once created, its properties cannot be changed.
+/// needed to identify a physical location. It is an immutable value object (a <c>record</c>), 
+/// meaning that once created, its properties cannot be changed.
 /// </para>
 /// <para>
 /// This value object is used by the <see cref="Location"/> entity to represent 

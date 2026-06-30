@@ -69,7 +69,7 @@ public class Department
     /// Gets the full hierarchical path of the department.
     /// </summary>
     /// <value>
-    /// A string representing the full path from the root department to this department,
+    /// A value object representing the full path from the root department to this department,
     /// with each segment separated by a forward slash (e.g., "root/child/grandchild").
     /// </value>
     /// <remarks>

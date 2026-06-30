@@ -9,7 +9,7 @@ namespace DirectoryService.Domain.ValueObjects;
 /// <remarks>
 /// <para>
 /// The <see cref="Slug"/> value object encapsulates a URL-friendly string identifier 
-/// that can be used in hierarchical paths and URLs. It is an immutable value object, 
+/// that can be used in hierarchical paths and URLs. It is an immutable value object (a <c>record</c>), 
 /// meaning that once created, its value cannot be changed.
 /// </para>
 /// <para>
