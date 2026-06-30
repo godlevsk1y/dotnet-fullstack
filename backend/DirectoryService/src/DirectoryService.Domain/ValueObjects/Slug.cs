@@ -52,7 +52,7 @@ public partial record Slug
     /// Gets the string value of the slug.
     /// </summary>
     /// <value>A string containing the slug value in the format described in the remarks.</value>
-    public string Value { get; private set; }
+    public string Value { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Slug"/> value object.
