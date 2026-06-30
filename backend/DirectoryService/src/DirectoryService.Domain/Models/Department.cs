@@ -1,3 +1,4 @@
+using DirectoryService.Domain.Ids;
 using DirectoryService.Domain.ValueObjects;
 using Path = DirectoryService.Domain.ValueObjects.Path;
 
@@ -44,7 +45,7 @@ public class Department
     /// Gets the unique identifier for the department.
     /// </summary>
     /// <value>A <see cref="Guid"/> that uniquely identifies this department.</value>
-    public Guid Id { get; private set; }
+    public DepartmentId Id { get; private set; }
 
     /// <summary>
     /// Gets the display name of the department.
@@ -123,11 +124,11 @@ public class Department
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
-        Id = Guid.NewGuid();
+        Id = new DepartmentId(Guid.NewGuid());
         Name = name;
         Slug = slug;
         Parent = parent;
-        ParentId = parent?.Id;
+        ParentId = parent?.Id.Value;
         
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
