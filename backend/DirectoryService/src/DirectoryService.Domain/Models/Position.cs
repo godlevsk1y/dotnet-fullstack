@@ -28,7 +28,7 @@ public class Position
     /// <summary>
     /// Gets the unique identifier for the position.
     /// </summary>
-    /// <value>A <see cref="Guid"/> that uniquely identifies this position.</value>
+    /// <value>A <see cref="PositionId"/> that uniquely identifies this position.</value>
     public PositionId Id { get; private set; }
 
     /// <summary>

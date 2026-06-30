@@ -39,13 +39,13 @@ public class DepartmentLocation
     /// <summary>
     /// Gets the unique identifier of the associated department.
     /// </summary>
-    /// <value>A <see cref="Guid"/> referencing the <see cref="Department"/> entity.</value>
+    /// <value>A <see cref="DepartmentId"/> referencing the <see cref="Department"/> entity.</value>
     public DepartmentId DepartmentId { get; private set; }
     
     /// <summary>
     /// Gets the unique identifier of the associated location.
     /// </summary>
-    /// <value>A <see cref="Guid"/> referencing the <see cref="Location"/> entity.</value>
+    /// <value>A <see cref="LocationId"/> referencing the <see cref="Location"/> entity.</value>
     public LocationId LocationId { get; private set; }
 
     /// <summary>

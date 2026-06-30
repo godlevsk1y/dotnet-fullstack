@@ -38,13 +38,13 @@ public class DepartmentPosition
     /// <summary>
     /// Gets the unique identifier of the associated department.
     /// </summary>
-    /// <value>A <see cref="Guid"/> referencing the <see cref="Department"/> entity.</value>
+    /// <value>A <see cref="DepartmentId"/> referencing the <see cref="Department"/> entity.</value>
     public DepartmentId DepartmentId { get; private set; }
     
     /// <summary>
     /// Gets the unique identifier of the associated position.
     /// </summary>
-    /// <value>A <see cref="Guid"/> referencing the <see cref="Position"/> entity.</value>
+    /// <value>A <see cref="PositionId"/> referencing the <see cref="Position"/> entity.</value>
     public PositionId PositionId { get; private set; }
     
     /// <summary>
