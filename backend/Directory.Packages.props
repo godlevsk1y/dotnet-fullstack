@@ -8,8 +8,15 @@
   <ItemGroup>
     <!-- HTTP / OpenAPI -->
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+    <!-- This is a transitive Microsoft.AspNetCore.OpenApi's dependency. 
+     The latest 10.0.9 references Microsoft.OpenApi/2.0.0 which has a known high severity vulnerability -->
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" /> 
     <PackageVersion Include="Scalar.AspNetCore" Version="2.16.4" />
+    
+    <!--  DB / EF Core  -->
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2" />
+    
     <!-- Analyzers (versions are defined here, references are added in Directory.Build.props) -->
     <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
     <PackageVersion Include="Meziantou.Analyzer" Version="3.0.44" />

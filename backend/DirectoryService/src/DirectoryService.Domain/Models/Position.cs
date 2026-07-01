@@ -29,7 +29,7 @@ public class Position
     /// Gets the unique identifier for the position.
     /// </summary>
     /// <value>A <see cref="PositionId"/> that uniquely identifies this position.</value>
-    public PositionId Id { get; private set; }
+    public PositionId Id { get; private set; } = null!;
 
     /// <summary>
     /// Gets the name of the position.
@@ -39,7 +39,7 @@ public class Position
     /// The name cannot be null or whitespace. This is enforced during construction.
     /// Common examples include "Software Engineer", "Product Manager", "HR Director".
     /// </remarks>
-    public string Name { get; private set; }
+    public string Name { get; private set; } = null!;
     
     /// <summary>
     /// Gets the timestamp when the position was created.
@@ -53,6 +53,9 @@ public class Position
     /// <value>A <see cref="DateTime"/> in UTC representing the last update time.</value>
     public DateTime UpdatedAt { get; private set; }
 
+    
+    private Position() { } // EF core
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="Position"/> class.
     /// </summary>

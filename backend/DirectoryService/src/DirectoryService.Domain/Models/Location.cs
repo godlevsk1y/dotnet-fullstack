@@ -42,8 +42,8 @@ public class Location
     /// Gets the unique identifier for the location.
     /// </summary>
     /// <value>A <see cref="LocationId"/> that uniquely identifies this location.</value>
-    public LocationId Id { get; private set; }
-    
+    public LocationId Id { get; private set; } = null!;
+
     /// <summary>
     /// Gets the display name of the location.
     /// </summary>
@@ -52,14 +52,14 @@ public class Location
     /// The name cannot be null or whitespace. This is enforced during construction.
     /// Common examples include "San Francisco HQ", "London Office", or "Warehouse A".
     /// </remarks>
-    public string Name { get; private set; }
-    
+    public string Name { get; private set; } = null!;
+
     /// <summary>
     /// Gets the physical address of the location.
     /// </summary>
     /// <value>An <see cref="Address"/> value object containing the full geographical details.</value>
     /// <seealso cref="Address"/>
-    public Address Address { get; private set; }
+    public Address Address { get; private set; } = null!;
 
     /// <summary>
     /// Gets the timestamp when the location was created.
@@ -73,6 +73,9 @@ public class Location
     /// <value>A <see cref="DateTime"/> in UTC representing the last update time.</value>
     public DateTime UpdatedAt { get; private set; }
 
+    
+    private Location() { } // EF Core
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="Location"/> class.
     /// </summary>

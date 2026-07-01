@@ -45,7 +45,7 @@ public class Department
     /// Gets the unique identifier for the department.
     /// </summary>
     /// <value>A <see cref="DepartmentId"/> that uniquely identifies this department.</value>
-    public DepartmentId Id { get; private set; }
+    public DepartmentId Id { get; private set; } = null!;
 
     /// <summary>
     /// Gets the display name of the department.
@@ -54,7 +54,7 @@ public class Department
     /// <remarks>
     /// The name cannot be null or whitespace. This is enforced during construction.
     /// </remarks>
-    public string Name { get; private set; }
+    public string Name { get; private set; } = null!;
 
     /// <summary>
     /// Gets the URL-friendly slug for the department.
@@ -64,7 +64,7 @@ public class Department
     /// The slug is used in the hierarchical path and must follow slug formatting rules.
     /// </remarks>
     /// <seealso cref="Slug"/>
-    public Slug Slug { get; private set; }
+    public Slug Slug { get; private set; } = null!;
 
     /// <summary>
     /// Gets the full hierarchical path of the department.
@@ -78,7 +78,7 @@ public class Department
     /// and the current department's slug. For root departments, the path equals the slug.
     /// </remarks>
     /// <seealso cref="Path"/>
-    public Path Path { get; private set; }
+    public Path Path { get; private set; } = null!;
     
     /// <summary>
     /// Gets the unique identifier of the parent department, if any.
@@ -87,7 +87,7 @@ public class Department
     /// A <see cref="Guid"/> representing the parent department's identifier,
     /// or <c>null</c> if this is a root-level department.
     /// </value>
-    public Guid? ParentId { get; private set; }
+    public DepartmentId? ParentId { get; private set; }
     
     /// <summary>
     /// Gets the parent department, if any.
@@ -109,7 +109,10 @@ public class Department
     /// </summary>
     /// <value>A <see cref="DateTime"/> in UTC representing the last update time.</value>
     public DateTime UpdatedAt { get; private set; }
-
+    
+    
+    private Department() { } // EF Core
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="Department"/> class.
     /// </summary>
@@ -129,7 +132,7 @@ public class Department
         Name = name;
         Slug = slug;
         Parent = parent;
-        ParentId = parent?.Id.Value;
+        ParentId = parent?.Id;
         
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
