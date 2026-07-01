@@ -17,7 +17,7 @@ namespace DirectoryService.Infrastructure.Postgres.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ParentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    parent_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     path = table.Column<string>(type: "character varying(600)", maxLength: 600, nullable: false),
@@ -28,7 +28,7 @@ namespace DirectoryService.Infrastructure.Postgres.Migrations
                     table.PrimaryKey("pk_department", x => x.id);
                     table.ForeignKey(
                         name: "fk_department_parent",
-                        column: x => x.ParentId,
+                        column: x => x.parent_id,
                         principalTable: "departments",
                         principalColumn: "id");
                 });
@@ -38,7 +38,7 @@ namespace DirectoryService.Infrastructure.Postgres.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     city = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
@@ -75,7 +75,7 @@ namespace DirectoryService.Infrastructure.Postgres.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     department_id = table.Column<Guid>(type: "uuid", nullable: false),
                     location_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsPrimary = table.Column<bool>(type: "boolean", nullable: false)
+                    is_primary = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -140,9 +140,9 @@ namespace DirectoryService.Infrastructure.Postgres.Migrations
                 column: "position_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_departments_ParentId",
+                name: "IX_departments_parent_id",
                 table: "departments",
-                column: "ParentId");
+                column: "parent_id");
         }
 
         /// <inheritdoc />
