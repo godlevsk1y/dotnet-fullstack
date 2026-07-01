@@ -8,6 +8,9 @@
   <ItemGroup>
     <!-- HTTP / OpenAPI -->
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <!-- This is a transitive Microsoft.AspNetCore.OpenApi's dependency. 
+     The latest 10.0.9 references Microsoft.OpenApi/2.0.0 which has a known high severity vulnerability -->
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" /> 
     <PackageVersion Include="Scalar.AspNetCore" Version="2.16.4" />
     
     <!--  DB / EF Core  -->
