@@ -18,6 +18,11 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             .HasConversion(l => l.Value, id => new LocationId(id))
             .HasColumnName("id");
 
+        builder.Property(l => l.Name)
+            .IsRequired()
+            .HasMaxLength(100)
+            .HasColumnName("name");
+        
         builder.ComplexProperty(l => l.Address, ab =>
         {
             ab.Property(a => a.Country)

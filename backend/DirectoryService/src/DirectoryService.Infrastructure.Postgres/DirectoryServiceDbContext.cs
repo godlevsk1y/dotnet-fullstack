@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DirectoryService.Infrastructure.Postgres;
 
-public class DirectoryServiceDbContext : DbContext
+public sealed class DirectoryServiceDbContext : DbContext
 {
     private readonly string _connectionString;
     
@@ -14,5 +14,10 @@ public class DirectoryServiceDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_connectionString);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DirectoryServiceDbContext).Assembly);
     }
 }

@@ -38,6 +38,17 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
                 .HasColumnName("path");
         });
         
+        builder
+            .HasOne<Department>(d => d.Parent)
+            .WithMany()
+            .IsRequired(false)
+            .HasForeignKey(d => d.ParentId)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasConstraintName("fk_department_parent");
+
+        builder.Property(d => d.ParentId)
+            .HasColumnName("parent_id");
+        
         builder.Property(d => d.CreatedAt)
             .IsRequired()
             .HasDefaultValueSql("now()")
