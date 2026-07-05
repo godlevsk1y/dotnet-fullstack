@@ -48,7 +48,7 @@ public record Address
     /// </summary>
     /// <value>A string representing the region, state, or province name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string Region { get; }
+    public string? Region { get; }
     
     /// <summary>
     /// Gets the city of the address.
@@ -62,7 +62,7 @@ public record Address
     /// </summary>
     /// <value>A string representing the district or neighborhood name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string District { get; }
+    public string? District { get; }
     
     /// <summary>
     /// Gets the street name of the address.
@@ -83,7 +83,7 @@ public record Address
     /// </summary>
     /// <value>A string representing the postal or ZIP code.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string PostalCode { get; }
+    public string? PostalCode { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Address"/> value object.
@@ -98,16 +98,20 @@ public record Address
     /// <exception cref="ArgumentException">
     /// Thrown when any of the parameters is null or whitespace.
     /// </exception>
-    public Address(string country, string region, string city, string district, string street, string houseNumber, string postalCode)
+    public Address(
+        string country, 
+        string? region,
+        string city, 
+        string? district,
+        string street, 
+        string houseNumber,
+        string? postalCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(country);
-        ArgumentException.ThrowIfNullOrWhiteSpace(region);
         ArgumentException.ThrowIfNullOrWhiteSpace(city);
-        ArgumentException.ThrowIfNullOrWhiteSpace(district);
         ArgumentException.ThrowIfNullOrWhiteSpace(street);
         ArgumentException.ThrowIfNullOrWhiteSpace(houseNumber);
-        ArgumentException.ThrowIfNullOrWhiteSpace(postalCode);
-        
+
         Country = country;
         Region = region;
         City = city;
