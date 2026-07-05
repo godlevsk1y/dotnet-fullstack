@@ -23,6 +23,9 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             .HasMaxLength(100)
             .HasColumnName("name");
         
+        builder.HasIndex(l => l.Name)
+            .IsUnique();
+        
         builder.ComplexProperty(l => l.Address, ab =>
         {
             ab.Property(a => a.Country)
