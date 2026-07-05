@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DirectoryService.Web.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class DepartmentsController : ControllerBase
 {
     [HttpPost]
@@ -13,7 +13,7 @@ public class DepartmentsController : ControllerBase
         var departmentId = Guid.NewGuid();
         
         return Created(
-            new Uri($"/departments/{departmentId}", UriKind.Relative), 
+            new Uri($"/api/departments/{departmentId}", UriKind.Relative), 
             new DepartmentDto(
                 Id: departmentId,
                 Name: request.Name,
