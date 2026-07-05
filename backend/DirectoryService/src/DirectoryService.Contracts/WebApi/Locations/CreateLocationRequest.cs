@@ -1,6 +1,6 @@
 namespace DirectoryService.Contracts.WebApi.Locations;
 
-public record CreateRequest(
+public record CreateLocationRequest(
     string Name,
     string Country,
     string Region,

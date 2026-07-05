@@ -8,7 +8,7 @@ namespace DirectoryService.Web.Controllers;
 public class LocationsController : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<LocationDto>> Create([FromBody] CreateRequest request)
+    public async Task<ActionResult<LocationDto>> Create([FromBody] CreateLocationRequest request)
     {
         var id = Guid.NewGuid();
         
@@ -51,7 +51,7 @@ public class LocationsController : ControllerBase
     }
 
     [HttpPut("{locationId:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid locationId, [FromBody] UpdateRequest request)
+    public async Task<IActionResult> Update([FromRoute] Guid locationId, [FromBody] UpdateLocationRequest request)
     {
         return NoContent();
     }

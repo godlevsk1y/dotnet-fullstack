@@ -1,6 +1,6 @@
 namespace DirectoryService.Contracts.WebApi.Locations;
 
-public record UpdateRequest(
+public record UpdateLocationRequest(
     string Name,
     string Country,
     string Region,

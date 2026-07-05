@@ -8,7 +8,7 @@ namespace DirectoryService.Web.Controllers;
 public class PositionsController : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<PositionDto>> Create([FromBody] CreateRequest request)
+    public async Task<ActionResult<PositionDto>> Create([FromBody] CreatePositionRequest request)
     {
         var id = Guid.NewGuid();
 
@@ -31,7 +31,7 @@ public class PositionsController : ControllerBase
     }
 
     [HttpPut("{positionId:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid positionId, [FromBody] UpdateRequest request)
+    public async Task<IActionResult> Update([FromRoute] Guid positionId, [FromBody] UpdatePositionRequest request)
     {
         return NoContent();
     }

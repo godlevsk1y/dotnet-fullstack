@@ -8,7 +8,7 @@ namespace DirectoryService.Web.Controllers;
 public class DepartmentsController : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<DepartmentDto>> Create([FromBody] CreateRequest request)
+    public async Task<ActionResult<DepartmentDto>> Create([FromBody] CreateDepartmentRequest request)
     {
         var departmentId = Guid.NewGuid();
         
@@ -43,7 +43,7 @@ public class DepartmentsController : ControllerBase
     }
     
     [HttpPut("{departmentId:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid departmentId, [FromBody] UpdateRequest request)
+    public async Task<IActionResult> Update([FromRoute] Guid departmentId, [FromBody] UpdateDepartmentRequest request)
     {
         return NoContent();
     }
