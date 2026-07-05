@@ -8,7 +8,7 @@ namespace DirectoryService.Web.Controllers;
 public class DepartmentsController : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateDepartmentRequest request)
+    public async Task<ActionResult<CreateDepartmentResponse>> Create([FromBody] CreateDepartmentRequest request)
     {
         var departmentId = Guid.NewGuid();
         
