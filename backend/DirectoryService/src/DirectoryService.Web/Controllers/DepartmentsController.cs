@@ -8,13 +8,13 @@ namespace DirectoryService.Web.Controllers;
 public class DepartmentsController : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<CreateDepartmentResponse>> Create([FromBody] CreateDepartmentRequest request)
+    public async Task<ActionResult<DepartmentDto>> Create([FromBody] CreateRequest request)
     {
         var departmentId = Guid.NewGuid();
         
         return Created(
             new Uri($"/departments/{departmentId}", UriKind.Relative), 
-            new CreateDepartmentResponse(
+            new DepartmentDto(
                 Id: departmentId,
                 Name: request.Name,
                 Slug: request.Slug,
@@ -26,9 +26,9 @@ public class DepartmentsController : ControllerBase
 
     [HttpGet]
     [Route("{departmentId:guid}")]
-    public async Task<ActionResult<GetDepartmentResponse>> Get([FromRoute] Guid departmentId)
+    public async Task<ActionResult<DepartmentDto>> Get([FromRoute] Guid departmentId)
     {
-        return new GetDepartmentResponse(
+        return new DepartmentDto(
             Id: departmentId, 
             Name: "Some Name", 
             Slug: "some-name", 
@@ -38,14 +38,14 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<GetDepartmentResponse>>> GetAll()
+    public async Task<ActionResult<IReadOnlyCollection<DepartmentDto>>> GetAll()
     {
-        return new List<GetDepartmentResponse>();
+        return new List<DepartmentDto>();
     }
 
     [HttpPut]
     [Route("{departmentId:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid departmentId, [FromBody] UpdateDepartmentRequest request)
+    public async Task<IActionResult> Update([FromRoute] Guid departmentId, [FromBody] UpdateRequest request)
     {
         return NoContent();
     }
