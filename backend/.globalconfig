@@ -16,6 +16,9 @@ dotnet_diagnostic.CA1812.severity = none
 # CA1034: nested types — in vertical slice architecture, a single file may contain multiple types (Command/Handler)
 dotnet_diagnostic.CA1034.severity = none
 
+# CA1515: make public class internal – it brakes the controllers
+dotnet_diagnostic.CA1515.severity = none
+
 # MA0004: ConfigureAwait is unnecessary in ASP.NET Core
 dotnet_diagnostic.MA0004.severity = none
 
