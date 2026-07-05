@@ -12,6 +12,11 @@ builder.Services.AddScoped<DirectoryServiceDbContext>(
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
 
+builder.Services.AddControllers();
+builder.Services.Configure<RouteOptions>(options => 
+    options.LowercaseUrls = true
+);
+
 var app = builder.Build();
 
 if (!app.Environment.IsProduction())
@@ -20,6 +25,7 @@ if (!app.Environment.IsProduction())
     app.MapScalarApiReference();
 }
 
+app.MapControllers();
 app.MapHealthChecks("/api/health");
 
 await app.RunAsync();
