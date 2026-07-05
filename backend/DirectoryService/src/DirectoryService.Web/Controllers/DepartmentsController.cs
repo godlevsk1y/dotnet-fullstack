@@ -10,12 +10,17 @@ public class DepartmentsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateDepartmentRequest request)
     {
-        return Created(new Uri("Departments/{departmentId}"), new CreateDepartmentResponse(
-            Id: Guid.NewGuid(),
-            Name: request.Name,
-            Slug: request.Slug,
-            Path: request.Slug,
-            ParentId: null)
+        var departmentId = Guid.NewGuid();
+        
+        return Created(
+            new Uri($"/departments/{departmentId}", UriKind.Relative), 
+            new CreateDepartmentResponse(
+                Id: departmentId,
+                Name: request.Name,
+                Slug: request.Slug,
+                Path: request.Slug,
+                ParentId: null
+            )
         );
     }
 
