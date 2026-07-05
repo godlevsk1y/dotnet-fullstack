@@ -36,8 +36,8 @@ public class PositionsController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{locationId:guid}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid locationId)
+    [HttpDelete("{positionId:guid}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid positionId)
     {
         return NoContent();
     }
