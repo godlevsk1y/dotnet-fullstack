@@ -1,4 +1,5 @@
 using DirectoryService.Contracts.WebApi.Locations;
+using DirectoryService.Core.Locations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Web.Controllers;
@@ -7,15 +8,24 @@ namespace DirectoryService.Web.Controllers;
 [Route("api/[controller]")]
 public class LocationsController : ControllerBase
 {
-    [HttpPost]
-    public async Task<ActionResult<LocationDto>> Create([FromBody] CreateLocationRequest request)
+    private readonly ILocationsService _locationsService;
+
+    public LocationsController(ILocationsService locationsService)
     {
-        var id = Guid.NewGuid();
+        _locationsService = locationsService;
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult<LocationDto>> Create(
+        [FromBody] CreateLocationRequest request, 
+        CancellationToken cancellationToken)
+    {
+        var locationId = await _locationsService.CreateAsync(request, cancellationToken);
         
         return Created(
-            new Uri($"/api/locations/{id}", UriKind.Relative),
+            new Uri($"/api/locations/{locationId}", UriKind.Relative),
             new LocationDto(
-                id,
+                locationId,
                 Name: request.Name,
                 Country: request.Country,
                 Region: request.Region,
