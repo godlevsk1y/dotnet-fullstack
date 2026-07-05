@@ -24,8 +24,7 @@ public class DepartmentsController : ControllerBase
         );
     }
 
-    [HttpGet]
-    [Route("{departmentId:guid}")]
+    [HttpGet("{departmentId:guid}")]
     public async Task<ActionResult<DepartmentDto>> Get([FromRoute] Guid departmentId)
     {
         return new DepartmentDto(
@@ -42,16 +41,14 @@ public class DepartmentsController : ControllerBase
     {
         return new List<DepartmentDto>();
     }
-
-    [HttpPut]
-    [Route("{departmentId:guid}")]
+    
+    [HttpPut("{departmentId:guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid departmentId, [FromBody] UpdateRequest request)
     {
         return NoContent();
     }
-
-    [HttpDelete]
-    [Route("{departmentId:guid}")]
+    
+    [HttpDelete("{departmentId:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid departmentId)
     {
         return NoContent();
