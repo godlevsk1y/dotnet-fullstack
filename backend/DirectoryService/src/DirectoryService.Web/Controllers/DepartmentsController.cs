@@ -37,7 +37,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<DepartmentDto>>> GetAll()
+    public async Task<ActionResult<IReadOnlyList<DepartmentDto>>> GetAll()
     {
         return new List<DepartmentDto>();
     }

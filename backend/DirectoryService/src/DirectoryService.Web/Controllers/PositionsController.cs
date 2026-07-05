@@ -25,7 +25,7 @@ public class PositionsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<PositionDto>>> GetAll()
+    public async Task<ActionResult<IReadOnlyList<PositionDto>>> GetAll()
     {
         return new List<PositionDto>();
     }

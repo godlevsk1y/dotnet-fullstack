@@ -45,7 +45,7 @@ public class LocationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<LocationDto>>> GetAll()
+    public async Task<ActionResult<IReadOnlyList<LocationDto>>> GetAll()
     {
         return new List<LocationDto>();
     }
