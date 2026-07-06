@@ -36,7 +36,7 @@ public class CreateLocationValidator : AbstractValidator<CreateLocationRequest>
         RuleFor(x => x.HouseNumber)
             .NotEmpty().WithMessage("HouseNumber is required")
             .MaximumLength(20).WithMessage("HouseNumber must not exceed 20 characters")
-            .Matches(@"/^\d+[a-яА-Яa-zA-Z]*(?:\/[\d[a-яА-Яa-zA-Z]+)?(?:(?:\s|к|корп|стр)\.?\s?\d+[a-яА-Я]*)?$/");
+            .Matches(@"^\d+[a-яА-Яa-zA-Z]*(?:\/[\d[a-яА-Яa-zA-Z]+)?(?:(?:\s|к|корп|стр)\.?\s?\d+[a-яА-Я]*)?$");
         
         RuleFor(x => x.PostalCode)
             .NotEmpty().WithMessage("Postal code cannot be empty")
