@@ -1,5 +1,6 @@
 using DirectoryService.Contracts.WebApi.Locations;
 using DirectoryService.Core.Locations;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Web.Controllers;
@@ -20,7 +21,20 @@ public class LocationsController : ControllerBase
         [FromBody] CreateLocationRequest request, 
         CancellationToken cancellationToken)
     {
-        var locationId = await _locationsService.CreateAsync(request, cancellationToken);
+        Guid locationId;
+
+        try
+        {
+            locationId = await _locationsService.CreateAsync(request, cancellationToken);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
+        catch (InvalidOperationException)
+        {
+            return Conflict();
+        }
         
         return Created(
             new Uri($"/api/locations/{locationId}", UriKind.Relative),
