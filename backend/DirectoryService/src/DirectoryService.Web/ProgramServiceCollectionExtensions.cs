@@ -6,41 +6,38 @@ namespace DirectoryService.Web;
 
 public static class ProgramServiceCollectionExtensions
 {
-    extension(IServiceCollection services)
+    public static IServiceCollection AddProgramDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        public IServiceCollection AddProgramDependencies(IConfiguration configuration)
-        {
-            // this throws an error. Repository implementation injection required.
-            services.AddCoreDependencies();
+        // this throws an error. Repository implementation injection required.
+        services.AddCoreDependencies();
 
-            services.AddWebDependencies();
+        services.AddWebDependencies();
 
-            var connectionString = configuration.GetConnectionString(nameof(DirectoryServiceDbContext));
+        var connectionString = configuration.GetConnectionString(nameof(DirectoryServiceDbContext));
         
-            services.AddDatabaseDependencies(connectionString!);
+        services.AddDatabaseDependencies(connectionString!);
         
-            return services;
-        }
+        return services;
+    }
 
-        private IServiceCollection AddDatabaseDependencies(string connectionString)
-        {
-            services.AddDbContext<DirectoryServiceDbContext>(options => 
-                options.UseNpgsql(connectionString));
+    private static IServiceCollection AddDatabaseDependencies(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<DirectoryServiceDbContext>(options => 
+            options.UseNpgsql(connectionString));
         
-            return services;
-        }
+        return services;
+    }
 
-        private IServiceCollection AddWebDependencies()
-        {
-            services.AddOpenApi();
-            services.AddHealthChecks();
+    private static IServiceCollection AddWebDependencies(this IServiceCollection services)
+    {
+        services.AddOpenApi();
+        services.AddHealthChecks();
 
-            services.AddControllers();
-            services.Configure<RouteOptions>(options => 
-                options.LowercaseUrls = true
-            );
+        services.AddControllers();
+        services.Configure<RouteOptions>(options => 
+            options.LowercaseUrls = true
+        );
 
-            return services;
-        }
+        return services;
     }
 }
