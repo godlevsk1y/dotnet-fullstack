@@ -97,15 +97,15 @@ public class NpgsqlLocationsRepository : ILocationsRepository
             row.PostalCode
         );
         
-        return new Location(new LocationId(row.Id), name, address);
+        return new Location(new LocationId(row.Id), name, address, row.CreatedAt, row.UpdatedAt);
     }
     
     private sealed record LocationDbRow
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public string City { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
         public string? District { get; set; } = string.Empty;

@@ -85,7 +85,7 @@ public class Location
     /// Thrown when <paramref name="name"/> is null or whitespace.
     /// </exception>
     public Location(string name, Address address)
-        : this(new LocationId(Guid.NewGuid()), name, address) { }
+        : this(new LocationId(Guid.NewGuid()), name, address, DateTime.UtcNow, DateTime.UtcNow) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Location"/> class.
@@ -93,11 +93,13 @@ public class Location
     /// <param name="id">The ID of the location.</param>
     /// <param name="name">The display name of the location. Cannot be null or whitespace.</param>
     /// <param name="address">The physical address of the location.</param>
+    /// <param name="createdAt">The <see cref="DateTime"/> when the location was created</param>
+    /// <param name="updatedAt">The <see cref="DateTime"/> when the location was last modified</param>
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="name"/> is null or whitespace.
     /// </exception>
     /// <remarks>This constructor must be used only when restoring data from DB.</remarks>
-    public Location(LocationId id, string name, Address address)
+    public Location(LocationId id, string name, Address address, DateTime createdAt, DateTime updatedAt)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
@@ -106,8 +108,8 @@ public class Location
         Name = name;
         Address = address;
         
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
     }
 
     /// <summary>
