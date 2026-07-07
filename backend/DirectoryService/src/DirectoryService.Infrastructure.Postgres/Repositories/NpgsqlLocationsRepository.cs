@@ -59,9 +59,16 @@ public class NpgsqlLocationsRepository : ILocationsRepository
         using var connection = await _connectionFactory.CreateConnectionAsync();
         
         const string selectByNameSql = """
-                                       SELECT id, name, created_at, updated_at, city, 
-                                       country, district, house_number, postal_code, 
-                                       region, street FROM locations
+                                       SELECT id, 
+                                              name, 
+                                              created_at AS CreatedAt, 
+                                              updated_at AS UpdatedAt, city, 
+                                              country, 
+                                              district, 
+                                              house_number AS HouseNumber, 
+                                              postal_code AS PostalCode, 
+                                              region, 
+                                              street FROM locations
                                        WHERE name = @Name
                                        """;
 
