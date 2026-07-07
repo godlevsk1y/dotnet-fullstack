@@ -29,7 +29,7 @@ public static class ProgramServiceCollectionExtensions
 
         services.AddSingleton<NpgsqlConnectionFactory>();
 
-        services.AddScoped<ILocationsRepository, NpgsqlLocationsRepository>();
+        services.AddScoped<ILocationsRepository, EfCoreLocationsRepository>();
         
         return services;
     }
