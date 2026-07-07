@@ -1,5 +1,7 @@
 using DirectoryService.Core;
+using DirectoryService.Core.Locations;
 using DirectoryService.Infrastructure.Postgres;
+using DirectoryService.Infrastructure.Postgres.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DirectoryService.Web;
@@ -24,6 +26,10 @@ public static class ProgramServiceCollectionExtensions
     {
         services.AddDbContext<DirectoryServiceDbContext>(options => 
             options.UseNpgsql(connectionString));
+
+        services.AddSingleton<NpgsqlConnectionFactory>();
+
+        services.AddScoped<ILocationsRepository, NpgsqlLocationsRepository>();
         
         return services;
     }
