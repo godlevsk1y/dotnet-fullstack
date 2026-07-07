@@ -8,17 +8,17 @@ namespace DirectoryService.Core.Locations;
 
 public partial class LocationsService : ILocationsService
 {
-    private readonly ILocationRepository _locationRepository;
+    private readonly ILocationsRepository _locationsRepository;
     private readonly IValidator<CreateLocationRequest> _createLocationRequestValidator;
     private readonly ILogger<LocationsService> _logger;
 
     public LocationsService(
-        ILocationRepository locationRepository,
+        ILocationsRepository locationsRepository,
         IValidator<CreateLocationRequest> createLocationRequestValidator,
         ILogger<LocationsService> logger
     )
     {
-        _locationRepository = locationRepository;
+        _locationsRepository = locationsRepository;
         _createLocationRequestValidator = createLocationRequestValidator;
         _logger = logger;
     }
@@ -33,7 +33,7 @@ public partial class LocationsService : ILocationsService
             throw new ValidationException(validationResult.Errors);
         }
 
-        var existingLocation = await _locationRepository.GetByNameAsync(dto.Name, cancellationToken);
+        var existingLocation = await _locationsRepository.GetByNameAsync(dto.Name, cancellationToken);
         if (existingLocation is not null)
         {
             // this will be replaced
@@ -53,7 +53,7 @@ public partial class LocationsService : ILocationsService
             )
         );
         
-        Guid createdLocationId = await _locationRepository.AddAsync(location, cancellationToken);
+        Guid createdLocationId = await _locationsRepository.AddAsync(location, cancellationToken);
         
         LogLocationCreated(createdLocationId);
         
