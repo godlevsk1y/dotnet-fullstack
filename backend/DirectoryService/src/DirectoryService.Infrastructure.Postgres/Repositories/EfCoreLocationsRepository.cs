@@ -21,4 +21,9 @@ public class EfCoreLocationsRepository : ILocationsRepository
         
         return location.Id;
     }
+
+    public async Task<Location?> GetByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        return await _context.Locations.FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
+    }
 }

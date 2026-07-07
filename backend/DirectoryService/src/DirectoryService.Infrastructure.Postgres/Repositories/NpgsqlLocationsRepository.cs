@@ -1,6 +1,7 @@
 using Dapper;
 using DirectoryService.Core.Locations;
 using DirectoryService.Domain.Models;
+using DirectoryService.Domain.ValueObjects;
 
 namespace DirectoryService.Infrastructure.Postgres.Repositories;
 
@@ -50,5 +51,65 @@ public class NpgsqlLocationsRepository : ILocationsRepository
         await connection.ExecuteAsync(command);
         
         return location.Id;
+    }
+
+    public async Task<Location?> GetByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        using var connection = await _connectionFactory.CreateConnectionAsync();
+        
+        const string selectByNameSql = """
+                                       SELECT id, name, created_at, updated_at, city, 
+                                       country, district, house_number, postal_code, 
+                                       region, street FROM locations
+                                       WHERE name = @Name
+                                       """;
+
+        var selectByNameParams = new
+        {
+            Name = name
+        };
+
+        var command = new CommandDefinition(
+            commandText: selectByNameSql,
+            parameters: selectByNameParams,
+            cancellationToken: cancellationToken
+        );
+
+        var row = await connection.QuerySingleOrDefaultAsync<LocationDbRow>(command);
+        
+        if (row is null) return null;
+        
+        var location = await connection.QueryFirstOrDefaultAsync<Location>(command);
+        
+        var address = new Address(
+            row.Country, 
+            row.Region, 
+            row.City, 
+            row.District, 
+            row.Street,
+            row.HouseNumber,
+            row.PostalCode
+        );
+        
+        typeof(Location)
+            .GetProperty(nameof(Location.Address))?
+            .SetValue(location, address);
+
+        return location;
+    }
+    
+    private sealed record LocationDbRow
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public string City { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
+        public string? District { get; set; } = string.Empty;
+        public string HouseNumber { get; set; } = string.Empty;
+        public string? PostalCode { get; set; } = string.Empty;
+        public string? Region { get; set; } = string.Empty;
+        public string Street { get; set; } = string.Empty;
     }
 }
