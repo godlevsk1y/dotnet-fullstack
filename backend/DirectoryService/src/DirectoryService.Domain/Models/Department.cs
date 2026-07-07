@@ -129,7 +129,7 @@ public class Department
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
         Id = new DepartmentId(Guid.NewGuid());
-        Name = name;
+        Name = name.Trim();
         Slug = slug;
         Parent = parent;
         ParentId = parent?.Id;

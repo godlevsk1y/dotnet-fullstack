@@ -56,6 +56,7 @@ public class Position
     
     private Position() { } // EF core
     
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="Position"/> class.
     /// </summary>
@@ -71,6 +72,22 @@ public class Position
         Name = name;
         
         CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Updates <see cref="Position"/> with given parameters
+    /// </summary>
+    /// <param name="name">The name of the position. Cannot be null or whitespace.</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="name"/> is null or whitespace.
+    /// </exception>
+    public void Update(string name)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        
+        Name = name;
+        
         UpdatedAt = DateTime.UtcNow;
     }
 }

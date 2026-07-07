@@ -89,4 +89,7 @@ public record Path
     {
         return new Path($"{Value}/{slug.Value}");
     }
+    
+    
+    public override string ToString() => Value;
 }

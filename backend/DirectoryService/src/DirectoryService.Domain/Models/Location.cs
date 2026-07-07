@@ -96,4 +96,22 @@ public class Location
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
+
+    /// <summary>
+    /// Updates <see cref="Location"/> with given parameters
+    /// </summary>
+    /// <param name="name">The display name of the location. Cannot be null or whitespace.</param>
+    /// <param name="address">The physical address of the location.</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="name"/> is null or whitespace.
+    /// </exception>
+    public void Update(string name, Address address)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        
+        Name = name;
+        Address = address;
+        
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

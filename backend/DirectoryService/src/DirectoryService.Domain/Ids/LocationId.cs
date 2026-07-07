@@ -7,4 +7,12 @@ namespace DirectoryService.Domain.Ids;
 /// <remarks>
 /// This record helps prevent primitive obsession by wrapping a standard GUID in a distinct domain type.
 /// </remarks>
-public record LocationId(Guid Value);
+public record LocationId(Guid Value)
+{
+    /// <summary>
+    /// Returns LocationId's underlying <see cref="Guid"/>
+    /// </summary>
+    public Guid ToGuid() => Value;
+    
+    public static implicit operator Guid(LocationId id) => id.Value;
+}

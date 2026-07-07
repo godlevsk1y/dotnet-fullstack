@@ -80,7 +80,11 @@ public partial record Slug
         
         Value = value;
     }
+
+    public static implicit operator string(Slug slug) => slug.Value;
     
+    public override string ToString() => Value;
+
     /// <summary>
     /// Gets the regular expression used to validate slug format.
     /// </summary>
