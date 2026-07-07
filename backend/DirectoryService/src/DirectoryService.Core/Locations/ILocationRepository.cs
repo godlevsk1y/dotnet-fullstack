@@ -10,7 +10,7 @@ public interface ILocationRepository
     
     Task<Location?> GetByNameAsync(string name, CancellationToken cancellationToken);
     
-    Task<Guid> SaveAsync(Location location, CancellationToken cancellationToken);
+    Task<Guid> UpdateAsync(Location location, CancellationToken cancellationToken);
     
     Task<Guid> DeleteAsync(Guid id, CancellationToken cancellationToken);
 }
