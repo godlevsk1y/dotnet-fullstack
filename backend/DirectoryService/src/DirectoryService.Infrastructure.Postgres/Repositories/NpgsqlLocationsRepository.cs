@@ -1,5 +1,6 @@
 using Dapper;
 using DirectoryService.Core.Locations;
+using DirectoryService.Domain.Ids;
 using DirectoryService.Domain.Models;
 using DirectoryService.Domain.ValueObjects;
 
@@ -79,8 +80,6 @@ public class NpgsqlLocationsRepository : ILocationsRepository
         
         if (row is null) return null;
         
-        var location = await connection.QueryFirstOrDefaultAsync<Location>(command);
-        
         var address = new Address(
             row.Country, 
             row.Region, 
@@ -91,16 +90,12 @@ public class NpgsqlLocationsRepository : ILocationsRepository
             row.PostalCode
         );
         
-        typeof(Location)
-            .GetProperty(nameof(Location.Address))?
-            .SetValue(location, address);
-
-        return location;
+        return new Location(new LocationId(row.Id), name, address);
     }
     
     private sealed record LocationDbRow
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

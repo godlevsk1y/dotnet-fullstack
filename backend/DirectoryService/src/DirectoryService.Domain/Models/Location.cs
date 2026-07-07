@@ -85,10 +85,23 @@ public class Location
     /// Thrown when <paramref name="name"/> is null or whitespace.
     /// </exception>
     public Location(string name, Address address)
+        : this(new LocationId(Guid.NewGuid()), name, address) { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Location"/> class.
+    /// </summary>
+    /// <param name="id">The ID of the location.</param>
+    /// <param name="name">The display name of the location. Cannot be null or whitespace.</param>
+    /// <param name="address">The physical address of the location.</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="name"/> is null or whitespace.
+    /// </exception>
+    /// <remarks>This constructor must be used only when restoring data from DB.</remarks>
+    public Location(LocationId id, string name, Address address)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         
-        Id = new LocationId(Guid.NewGuid());
+        Id = id;
         
         Name = name;
         Address = address;
