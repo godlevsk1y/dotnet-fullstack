@@ -53,11 +53,11 @@ public partial class LocationsService : ILocationsService
             )
         );
         
-        Guid addResult = await _locationRepository.AddAsync(location, cancellationToken);
+        Guid createdLocationId = await _locationRepository.AddAsync(location, cancellationToken);
         
-        LogLocationCreated(addResult);
+        LogLocationCreated(createdLocationId);
         
-        return addResult;
+        return createdLocationId;
     }
     
     [LoggerMessage(
