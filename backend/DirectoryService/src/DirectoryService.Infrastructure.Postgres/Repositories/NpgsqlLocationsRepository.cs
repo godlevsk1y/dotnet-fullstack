@@ -58,7 +58,7 @@ public class NpgsqlLocationsRepository : ILocationsRepository
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();
         
-        const string selectByNameSql = """
+        const string selectByIdSql = """
                                        SELECT id, 
                                               name, 
                                               created_at AS CreatedAt, 
@@ -72,14 +72,14 @@ public class NpgsqlLocationsRepository : ILocationsRepository
                                        WHERE id = @Id
                                        """;
 
-        var selectByNameParams = new
+        var selectByIdParams = new
         {
             Id = id
         };
 
         var command = new CommandDefinition(
-            commandText: selectByNameSql,
-            parameters: selectByNameParams,
+            commandText: selectByIdSql,
+            parameters: selectByIdParams,
             cancellationToken: cancellationToken
         );
 
