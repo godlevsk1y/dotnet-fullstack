@@ -1,4 +1,6 @@
 using DirectoryService.Contracts.WebApi.Departments;
+using DirectoryService.Core.Departments;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Web.Controllers;
@@ -7,20 +9,35 @@ namespace DirectoryService.Web.Controllers;
 [Route("api/[controller]")]
 public class DepartmentsController : ControllerBase
 {
-    [HttpPost]
-    public async Task<ActionResult<DepartmentDto>> Create([FromBody] CreateDepartmentRequest request)
+    private readonly IDepartmentsService _departmentsService;
+
+    public DepartmentsController(IDepartmentsService departmentsService)
     {
-        var departmentId = Guid.NewGuid();
+        _departmentsService = departmentsService;
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult<DepartmentDto>> Create([FromBody] CreateDepartmentRequest request, 
+        CancellationToken cancellationToken)
+    {
+        DepartmentDto departmentDto;
+
+        try
+        {
+            departmentDto = await _departmentsService.CreateAsync(request, cancellationToken);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
         
         return Created(
-            new Uri($"/api/departments/{departmentId}", UriKind.Relative), 
-            new DepartmentDto(
-                Id: departmentId,
-                Name: request.Name,
-                Slug: request.Slug,
-                Path: request.Slug,
-                ParentId: null
-            )
+            new Uri($"/api/departments/{departmentDto.Id}", UriKind.Relative), 
+            departmentDto
         );
     }
 

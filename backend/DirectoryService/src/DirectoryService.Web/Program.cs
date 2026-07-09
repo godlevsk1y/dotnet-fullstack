@@ -1,4 +1,3 @@
-using DirectoryService.Infrastructure.Postgres;
 using DirectoryService.Web;
 using Scalar.AspNetCore;
 
