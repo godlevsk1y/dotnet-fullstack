@@ -28,8 +28,6 @@ public static class ProgramServiceCollectionExtensions
         services.AddDbContext<DirectoryServiceDbContext>(options => 
             options.UseNpgsql(connectionString));
 
-        services.AddSingleton<NpgsqlConnectionFactory>();
-
         services.AddScoped<ILocationsRepository, EfCoreLocationsRepository>();
         services.AddScoped<IDepartmentsRepository, EfCoreDepartmentsRepository>();
         

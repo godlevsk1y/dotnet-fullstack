@@ -22,6 +22,11 @@ public class EfCoreLocationsRepository : ILocationsRepository
         return location.Id;
     }
 
+    public async Task SaveAsync(CancellationToken cancellationToken)
+    {
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<Location?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _context.Locations.FirstOrDefaultAsync(l => l.Id == id, cancellationToken);

@@ -1,12 +1,12 @@
 namespace DirectoryService.Contracts.WebApi.Locations;
 
 public record UpdateLocationRequest(
-    string Name,
-    string Country,
-    string Region,
-    string City,
-    string District,
-    string Street,
-    string HouseNumber,
-    string PostalCode
+    string? Name,
+    string? Country,
+    string? Region,
+    string? City,
+    string? District,
+    string? Street,
+    string? HouseNumber,
+    string? PostalCode
 );

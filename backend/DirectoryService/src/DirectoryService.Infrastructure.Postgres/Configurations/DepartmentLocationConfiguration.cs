@@ -26,6 +26,9 @@ public class DepartmentLocationConfiguration : IEntityTypeConfiguration<Departme
             .IsRequired()
             .HasConversion(dl => dl.Value, id => new LocationId(id))
             .HasColumnName("location_id");
+        
+        builder.HasIndex(dl => new  { dl.Id, dl.LocationId })
+            .IsUnique();
 
         builder.Property(dl => dl.IsPrimary)
             .IsRequired()

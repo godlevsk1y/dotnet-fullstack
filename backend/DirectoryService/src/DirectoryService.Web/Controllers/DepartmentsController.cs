@@ -1,4 +1,5 @@
 using DirectoryService.Contracts.WebApi.Departments;
+using DirectoryService.Contracts.WebApi.Locations;
 using DirectoryService.Core.Departments;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -41,33 +42,67 @@ public class DepartmentsController : ControllerBase
         );
     }
 
-    [HttpGet("{departmentId:guid}")]
-    public async Task<ActionResult<DepartmentDto>> Get([FromRoute] Guid departmentId)
+    [HttpPatch("{id:guid}")]
+    public async Task<ActionResult<Guid>> Update(
+        [FromRoute] Guid id,
+        [FromBody] UpdateDepartmentRequest request,
+        CancellationToken cancellationToken)
     {
-        return new DepartmentDto(
-            Id: departmentId, 
-            Name: "Some Name", 
-            Slug: "some-name", 
-            Path: "some-name", 
-            ParentId: null
-        );
+        Guid departmentId;
+
+        try
+        {
+            departmentId = await _departmentsService.UpdateAsync(id, request, cancellationToken);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
+        
+        return Ok(departmentId);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<DepartmentDto>>> GetAll()
+    [HttpPost("{departmentId:guid}/locations/{locationId:guid}")]
+    public async Task<IActionResult> AddLocationAsync(
+        [FromRoute] Guid departmentId, 
+        [FromRoute] Guid locationId,
+        CancellationToken cancellationToken)
     {
-        return new List<DepartmentDto>();
+        try
+        {
+            await _departmentsService.AddLocationAsync(departmentId, locationId, cancellationToken);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(ex.Message);
+        }
+
+        return Ok();
     }
-    
-    [HttpPut("{departmentId:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid departmentId, [FromBody] UpdateDepartmentRequest request)
+
+    [HttpDelete("{departmentId:guid}/locations/{locationId:guid}")]
+    public async Task<IActionResult> RemoveLocationAsync(
+        [FromRoute] Guid departmentId,
+        [FromRoute] Guid locationId,
+        CancellationToken cancellationToken)
     {
-        return NoContent();
-    }
-    
-    [HttpDelete("{departmentId:guid}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid departmentId)
-    {
+        try
+        {
+            await _departmentsService.RemoveLocationAsync(departmentId, locationId, cancellationToken);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        
         return NoContent();
     }
 }
