@@ -9,17 +9,22 @@ namespace DirectoryService.Core.Locations;
 public partial class LocationsService : ILocationsService
 {
     private readonly ILocationsRepository _locationsRepository;
+    
     private readonly IValidator<CreateLocationRequest> _createLocationRequestValidator;
+    private readonly IValidator<UpdateLocationRequest> _updateLocationRequestValidator;
+
     private readonly ILogger<LocationsService> _logger;
 
     public LocationsService(
         ILocationsRepository locationsRepository,
         IValidator<CreateLocationRequest> createLocationRequestValidator,
+        IValidator<UpdateLocationRequest> updateLocationRequestValidator,
         ILogger<LocationsService> logger
     )
     {
         _locationsRepository = locationsRepository;
         _createLocationRequestValidator = createLocationRequestValidator;
+        _updateLocationRequestValidator = updateLocationRequestValidator;
         _logger = logger;
     }
     
@@ -68,6 +73,35 @@ public partial class LocationsService : ILocationsService
             HouseNumber: location.Address.HouseNumber,
             PostalCode: location.Address.PostalCode
         );
+    }
+
+    public async Task<Guid> UpdateAsync(Guid id, UpdateLocationRequest dto, CancellationToken cancellationToken)
+    {
+        var validationResult = await _updateLocationRequestValidator.ValidateAsync(dto, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+        
+        var location = await _locationsRepository.GetByIdAsync(id, cancellationToken) 
+                       ?? throw new KeyNotFoundException($"Location with id {id} not found.");
+
+        var newAddress = new Address(
+            country: dto.Country ?? location.Address.Country,
+            region: dto.Region ?? location.Address.Region,
+            city: dto.City ?? location.Address.City,
+            district: dto.District ?? location.Address.District,
+            street: dto.Street ?? location.Address.Street,
+            houseNumber: dto.HouseNumber ?? location.Address.HouseNumber,
+            postalCode: dto.PostalCode ?? location.Address.PostalCode
+        );
+        
+        location.Update(dto.Name ?? location.Name, newAddress);
+        
+        await _locationsRepository.SaveAsync(cancellationToken);
+        
+        return location.Id;
     }
     
     [LoggerMessage(

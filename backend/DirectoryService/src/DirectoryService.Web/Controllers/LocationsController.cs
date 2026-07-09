@@ -41,4 +41,29 @@ public class LocationsController : ControllerBase
             locationDto
         );
     }
+
+
+    [HttpPatch("{id:guid}")]
+    public async Task<ActionResult<Guid>> Update(
+        [FromRoute] Guid id,
+        [FromBody] UpdateLocationRequest request,
+        CancellationToken cancellationToken)
+    {
+        Guid locationId;
+
+        try
+        {
+            locationId = await _locationsService.UpdateAsync(id, request, cancellationToken);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
+        
+        return locationId;
+    }
 }

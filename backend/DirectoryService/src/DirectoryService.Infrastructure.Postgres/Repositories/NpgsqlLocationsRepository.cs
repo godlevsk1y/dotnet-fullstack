@@ -54,6 +54,8 @@ public class NpgsqlLocationsRepository : ILocationsRepository
         return location.Id;
     }
 
+    public Task SaveAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
     public async Task<Location?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();
@@ -154,10 +156,10 @@ public class NpgsqlLocationsRepository : ILocationsRepository
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public string City { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
-        public string? District { get; set; } = string.Empty;
+        public string District { get; set; } = string.Empty;
         public string HouseNumber { get; set; } = string.Empty;
-        public string? PostalCode { get; set; } = string.Empty;
-        public string? Region { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+        public string Region { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
     }
 }
