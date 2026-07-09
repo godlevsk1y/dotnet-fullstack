@@ -47,4 +47,23 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
         
         return department;
     }
+
+    public async Task AddLocationAsync(DepartmentLocation departmentLocation, CancellationToken cancellationToken)
+    {
+        var existing = await _context.DepartmentLocations.FirstOrDefaultAsync(
+            dl => dl.DepartmentId == departmentLocation.DepartmentId 
+                  && 
+                  dl.LocationId == departmentLocation.LocationId, 
+            cancellationToken
+        );
+
+        if (existing is not null)
+        {
+            throw new InvalidOperationException("Unique constraint violation");
+        }
+        
+        await _context.DepartmentLocations.AddAsync(departmentLocation, cancellationToken);
+        
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

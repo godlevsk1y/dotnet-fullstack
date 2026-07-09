@@ -123,6 +123,27 @@ public partial class DepartmentsService : IDepartmentsService
         return department.Id;
     }
 
+    public async Task AddLocationAsync(Guid departmentId, Guid locationId, CancellationToken cancellationToken)
+    {
+        var department = await _departmentsRepository.GetByIdAsync(departmentId, cancellationToken) 
+                         ?? throw new KeyNotFoundException($"Department with id {departmentId} not found");
+        
+        var location = await _locationsRepository.GetByIdAsync(locationId, cancellationToken) 
+                       ?? throw new KeyNotFoundException($"Location with id {locationId} not found");
+
+        var departmentLocation = new DepartmentLocation(department.Id, location.Id);
+        
+        try
+        {
+            await _departmentsRepository.AddLocationAsync(departmentLocation, cancellationToken);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Location with id {locationId} is already added " +
+                                                $"to Department with id {department.Id}");
+        }
+    }
+
     [LoggerMessage(
         Level = LogLevel.Information, 
         Message = "Department created with id {departmentId}")]

@@ -1,4 +1,5 @@
 using DirectoryService.Contracts.WebApi.Departments;
+using DirectoryService.Contracts.WebApi.Locations;
 using DirectoryService.Core.Departments;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -63,5 +64,27 @@ public class DepartmentsController : ControllerBase
         }
         
         return Ok(departmentId);
+    }
+
+    [HttpPost("{departmentId:guid}/locations/{locationId:guid}")]
+    public async Task<IActionResult> AddLocationAsync(
+        [FromRoute] Guid departmentId, 
+        [FromRoute] Guid locationId,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _departmentsService.AddLocationAsync(departmentId, locationId, cancellationToken);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(ex.Message);
+        }
+
+        return Ok();
     }
 }
