@@ -1,4 +1,5 @@
 using DirectoryService.Core;
+using DirectoryService.Core.Departments;
 using DirectoryService.Core.Locations;
 using DirectoryService.Infrastructure.Postgres;
 using DirectoryService.Infrastructure.Postgres.Repositories;
@@ -30,6 +31,7 @@ public static class ProgramServiceCollectionExtensions
         services.AddSingleton<NpgsqlConnectionFactory>();
 
         services.AddScoped<ILocationsRepository, EfCoreLocationsRepository>();
+        services.AddScoped<IDepartmentsRepository, EfCoreDepartmentsRepository>();
         
         return services;
     }
