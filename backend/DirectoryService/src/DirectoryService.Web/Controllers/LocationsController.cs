@@ -41,38 +41,4 @@ public class LocationsController : ControllerBase
             locationDto
         );
     }
-
-    [HttpGet("{locationId:guid}")]
-    public async Task<ActionResult<LocationDto>> Get([FromRoute] Guid locationId)
-    {
-        return Ok(new LocationDto(
-            Id: locationId,
-            Name: "Berlin Tech Hub",
-            Country: "Germany",
-            Region: "Berlin",
-            City: "Berlin",
-            District: "Mitte",
-            Street: "Brunnenstraße",
-            HouseNumber: "111",
-            PostalCode: "13355"
-        ));
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<LocationDto>>> GetAll()
-    {
-        return new List<LocationDto>();
-    }
-
-    [HttpPut("{locationId:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid locationId, [FromBody] UpdateLocationRequest request)
-    {
-        return NoContent();
-    }
-    
-    [HttpDelete("{locationId:guid}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid locationId)
-    {
-        return NoContent();
-    }
 }
