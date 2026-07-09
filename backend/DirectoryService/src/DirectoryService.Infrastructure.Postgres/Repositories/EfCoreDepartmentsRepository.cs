@@ -36,15 +36,10 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
 
     public async Task<Department?> GetByIdWithParentAsync(Guid id, CancellationToken cancellationToken)
     {
-        var department = await _context.Departments.FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
-        
-        if (department is null) return null;
-        
-        department.SetParent(await _context.Departments.FirstOrDefaultAsync(
-            d => d.Id == department.ParentId, 
-            cancellationToken
-        ));
-        
+        var department = await _context.Departments
+            .Include(d => d.Parent)
+            .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+
         return department;
     }
 
