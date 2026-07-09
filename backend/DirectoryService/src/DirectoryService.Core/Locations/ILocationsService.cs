@@ -4,5 +4,5 @@ namespace DirectoryService.Core.Locations;
 
 public interface ILocationsService
 {
-    Task<Guid> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken);
+    Task<LocationDto> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken);
 }

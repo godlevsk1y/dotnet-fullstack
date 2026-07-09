@@ -23,7 +23,7 @@ public partial class LocationsService : ILocationsService
         _logger = logger;
     }
     
-    public async Task<Guid> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken)
+    public async Task<LocationDto> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken)
     {
         var validationResult = await _createLocationRequestValidator
             .ValidateAsync(dto, cancellationToken);
@@ -53,11 +53,21 @@ public partial class LocationsService : ILocationsService
             )
         );
         
-        Guid createdLocationId = await _locationsRepository.AddAsync(location, cancellationToken);
+        await _locationsRepository.AddAsync(location, cancellationToken);
         
-        LogLocationCreated(createdLocationId);
+        LogLocationCreated(location.Id);
         
-        return createdLocationId;
+        return new LocationDto(
+            Id: location.Id,
+            Name: location.Name,
+            Country: location.Address.Country,
+            Region: location.Address.Region,
+            City: location.Address.City,
+            District: location.Address.District,
+            Street: location.Address.Street,
+            HouseNumber: location.Address.HouseNumber,
+            PostalCode: location.Address.PostalCode
+        );
     }
     
     [LoggerMessage(

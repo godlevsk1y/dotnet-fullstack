@@ -21,11 +21,11 @@ public class LocationsController : ControllerBase
         [FromBody] CreateLocationRequest request, 
         CancellationToken cancellationToken)
     {
-        Guid locationId;
+        LocationDto locationDto;
 
         try
         {
-            locationId = await _locationsService.CreateAsync(request, cancellationToken);
+            locationDto = await _locationsService.CreateAsync(request, cancellationToken);
         }
         catch (ValidationException ex)
         {
@@ -37,18 +37,8 @@ public class LocationsController : ControllerBase
         }
         
         return Created(
-            new Uri($"/api/locations/{locationId}", UriKind.Relative),
-            new LocationDto(
-                locationId,
-                Name: request.Name,
-                Country: request.Country,
-                Region: request.Region,
-                City: request.City,
-                District: request.District,
-                Street: request.Street,
-                HouseNumber: request.HouseNumber,
-                PostalCode: request.PostalCode
-            )
+            new Uri($"/api/locations/{locationDto}", UriKind.Relative),
+            locationDto
         );
     }
 
