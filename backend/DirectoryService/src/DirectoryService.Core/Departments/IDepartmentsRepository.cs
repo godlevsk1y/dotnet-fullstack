@@ -16,4 +16,8 @@ public interface IDepartmentsRepository
     Task<Department?> GetByIdWithParentAsync(Guid id, CancellationToken cancellationToken);
     
     Task AddLocationAsync(DepartmentLocation departmentLocation, CancellationToken cancellationToken);
+    
+    Task RemoveLocationAsync(DepartmentLocation departmentLocation, CancellationToken cancellationToken);
+    
+    Task<DepartmentLocation?> GetDepartmentLocation(Guid departmentId, Guid locationId, CancellationToken cancellationToken);
 }

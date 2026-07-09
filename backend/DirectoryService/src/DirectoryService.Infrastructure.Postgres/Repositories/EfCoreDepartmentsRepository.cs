@@ -66,4 +66,21 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
         
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task RemoveLocationAsync(DepartmentLocation departmentLocation, CancellationToken cancellationToken)
+    {
+        await _context.DepartmentLocations
+            .Where(dl => dl.DepartmentId == departmentLocation.DepartmentId)
+            .ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public async Task<DepartmentLocation?> GetDepartmentLocation(Guid departmentId, Guid locationId, CancellationToken cancellationToken)
+    {
+        return await _context.DepartmentLocations.FirstOrDefaultAsync(
+            dl => dl.DepartmentId == departmentId 
+                  && 
+                  dl.LocationId == locationId, 
+            cancellationToken
+        );
+    }
 }

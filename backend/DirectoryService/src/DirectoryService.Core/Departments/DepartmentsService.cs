@@ -144,6 +144,16 @@ public partial class DepartmentsService : IDepartmentsService
         }
     }
 
+    public async Task RemoveLocationAsync(Guid departmentId, Guid locationId, CancellationToken cancellationToken)
+    {
+        var departmentLocation = await _departmentsRepository
+            .GetDepartmentLocation(departmentId, locationId, cancellationToken) ?? 
+            throw new KeyNotFoundException($"Location with id {locationId} does not " +
+                                           $"belong to Department with id {departmentId}");
+        
+        await _departmentsRepository.RemoveLocationAsync(departmentLocation, cancellationToken);
+    }
+
     [LoggerMessage(
         Level = LogLevel.Information, 
         Message = "Department created with id {departmentId}")]

@@ -87,4 +87,22 @@ public class DepartmentsController : ControllerBase
 
         return Ok();
     }
+
+    [HttpDelete("{departmentId:guid}/locations/{locationId:guid}")]
+    public async Task<IActionResult> RemoveLocationAsync(
+        [FromRoute] Guid departmentId,
+        [FromRoute] Guid locationId,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _departmentsService.RemoveLocationAsync(departmentId, locationId, cancellationToken);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NoContent();
+        }
+        
+        return NoContent();
+    }
 }
