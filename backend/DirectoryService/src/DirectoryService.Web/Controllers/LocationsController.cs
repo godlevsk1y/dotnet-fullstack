@@ -64,6 +64,6 @@ public class LocationsController : ControllerBase
             return BadRequest(ex.Errors);
         }
         
-        return locationId;
+        return Ok(locationId);
     }
 }

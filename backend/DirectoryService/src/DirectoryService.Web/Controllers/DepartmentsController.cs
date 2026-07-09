@@ -98,9 +98,9 @@ public class DepartmentsController : ControllerBase
         {
             await _departmentsService.RemoveLocationAsync(departmentId, locationId, cancellationToken);
         }
-        catch (KeyNotFoundException)
+        catch (KeyNotFoundException ex)
         {
-            return NoContent();
+            return NotFound(ex.Message);
         }
         
         return NoContent();
