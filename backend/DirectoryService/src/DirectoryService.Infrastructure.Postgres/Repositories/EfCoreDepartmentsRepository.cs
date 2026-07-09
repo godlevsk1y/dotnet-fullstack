@@ -24,8 +24,27 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
         return department.Id;
     }
 
+    public async Task SaveAsync(CancellationToken cancellationToken)
+    {
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<Department?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _context.Departments.FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+    }
+
+    public async Task<Department?> GetByIdWithParentAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var department = await _context.Departments.FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+        
+        if (department is null) return null;
+        
+        department.SetParent(await _context.Departments.FirstOrDefaultAsync(
+            d => d.Id == department.ParentId, 
+            cancellationToken
+        ));
+        
+        return department;
     }
 }

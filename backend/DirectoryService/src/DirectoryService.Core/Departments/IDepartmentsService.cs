@@ -5,4 +5,6 @@ namespace DirectoryService.Core.Departments;
 public interface IDepartmentsService
 {
     Task<DepartmentDto> CreateAsync(CreateDepartmentRequest dto, CancellationToken cancellationToken);
+    
+    Task<Guid> UpdateAsync(Guid id, UpdateDepartmentRequest dto, CancellationToken cancellationToken);
 }

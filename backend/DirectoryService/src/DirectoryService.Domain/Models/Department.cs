@@ -137,6 +137,60 @@ public class Department
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
 
-        Path = Parent is null ? new Path(slug) : Parent.Path.Append(slug);
+        Path = CalculatePath();
     }
+
+
+    /// <summary>
+    /// Updates <see cref="Department"/>'s visible name
+    /// </summary>
+    /// <param name="name">The new name of the <see cref="Department"/></param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="name"/> is null or whitespace.
+    /// </exception>
+    public void Rename(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        
+        Name = name.Trim();
+        
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Updates the <see cref="Department"/>'s <see cref="Slug"/> 
+    /// </summary>
+    /// <param name="slug">The new <see cref="Slug"/></param>
+    public void ChangeSlug(Slug slug)
+    {
+        Slug = slug;
+        
+        UpdatedAt = DateTime.UtcNow;
+        
+        Path = CalculatePath();
+    }
+
+    /// <summary>
+    /// Sets given <see cref="Department"/> as a parent
+    /// </summary>
+    /// <param name="parent">The new parent <see cref="Department"/>
+    /// (if null, the <see cref="Department"/> is considered as a root)</param>
+    /// <exception cref="InvalidOperationException">Thrown if
+    /// the department is set as a parent to itself </exception>
+    public void SetParent(Department? parent)
+    {
+        if (parent is not null && parent.Id == Id)
+        {
+            throw new InvalidOperationException("Department cannot be parented to itself");
+        }
+        
+        Parent = parent;
+        ParentId = Parent?.Id;
+
+        Path = CalculatePath();
+        
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
+    private Path CalculatePath() => Parent is null ? new Path(Slug) : Parent.Path.Append(Slug);
 }
