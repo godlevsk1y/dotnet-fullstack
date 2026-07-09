@@ -70,7 +70,7 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
     public async Task RemoveLocationAsync(DepartmentLocation departmentLocation, CancellationToken cancellationToken)
     {
         await _context.DepartmentLocations
-            .Where(dl => dl.DepartmentId == departmentLocation.DepartmentId)
+            .Where(dl => dl.Id == departmentLocation.Id)
             .ExecuteDeleteAsync(cancellationToken);
     }
 
