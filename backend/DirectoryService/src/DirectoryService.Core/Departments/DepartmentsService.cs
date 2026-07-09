@@ -71,8 +71,8 @@ public partial class DepartmentsService : IDepartmentsService
             department.Name,
             department.Slug,
             department.Path.Value,
-            department.ParentId?.Value)
-        ;
+            department.ParentId?.Value
+        );
     }
     
     [LoggerMessage(

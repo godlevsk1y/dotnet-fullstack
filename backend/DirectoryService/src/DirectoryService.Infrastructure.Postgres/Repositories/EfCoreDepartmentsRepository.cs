@@ -17,7 +17,7 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
     {
         await _context.Departments.AddAsync(department, cancellationToken);
         
-        await _context.AddRangeAsync(locations, cancellationToken);
+        await _context.DepartmentLocations.AddRangeAsync(locations, cancellationToken);
         
         await _context.SaveChangesAsync(cancellationToken);
         
