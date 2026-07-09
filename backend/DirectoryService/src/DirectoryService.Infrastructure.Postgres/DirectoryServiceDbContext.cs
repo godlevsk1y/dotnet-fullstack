@@ -8,6 +8,8 @@ public sealed class DirectoryServiceDbContext : DbContext
     public DbSet<Department> Departments { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Position> Positions { get; set; }
+    public DbSet<DepartmentLocation> DepartmentLocations { get; set; }
+    public DbSet<DepartmentPosition> DepartmentPositions { get; set; }
     
     public DirectoryServiceDbContext(DbContextOptions<DirectoryServiceDbContext> options)
         : base(options) { }

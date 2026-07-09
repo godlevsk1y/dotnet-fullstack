@@ -54,6 +54,52 @@ public class NpgsqlLocationsRepository : ILocationsRepository
         return location.Id;
     }
 
+    public async Task<Location?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        using var connection = await _connectionFactory.CreateConnectionAsync();
+        
+        const string selectByNameSql = """
+                                       SELECT id, 
+                                              name, 
+                                              created_at AS CreatedAt, 
+                                              updated_at AS UpdatedAt, city, 
+                                              country, 
+                                              district, 
+                                              house_number AS HouseNumber, 
+                                              postal_code AS PostalCode, 
+                                              region, 
+                                              street FROM locations
+                                       WHERE id = @Id
+                                       """;
+
+        var selectByNameParams = new
+        {
+            Id = id
+        };
+
+        var command = new CommandDefinition(
+            commandText: selectByNameSql,
+            parameters: selectByNameParams,
+            cancellationToken: cancellationToken
+        );
+
+        var row = await connection.QuerySingleOrDefaultAsync<LocationDbRow>(command);
+        
+        if (row is null) return null;
+        
+        var address = new Address(
+            row.Country, 
+            row.Region, 
+            row.City, 
+            row.District, 
+            row.Street,
+            row.HouseNumber,
+            row.PostalCode
+        );
+        
+        return new Location(new LocationId(row.Id), row.Name, address, row.CreatedAt, row.UpdatedAt);
+    }
+
     public async Task<Location?> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();

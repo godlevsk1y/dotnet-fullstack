@@ -1,4 +1,5 @@
 using DirectoryService.Contracts.WebApi.Departments;
+using DirectoryService.Core.Locations;
 using DirectoryService.Domain.Models;
 using DirectoryService.Domain.ValueObjects;
 using FluentValidation;
@@ -11,9 +12,11 @@ public partial class DepartmentsService : IDepartmentsService
     private readonly IValidator<CreateDepartmentRequest> _createDepartmentRequestValidator;
     private readonly ILogger<DepartmentsService> _logger;
     private readonly IDepartmentsRepository _departmentsRepository;
+    private readonly ILocationsRepository _locationsRepository;
 
     public DepartmentsService(
         IDepartmentsRepository departmentsRepository,
+        ILocationsRepository locationsRepository,
         IValidator<CreateDepartmentRequest> createDepartmentRequestValidator,
         ILogger<DepartmentsService> logger
     )
@@ -21,6 +24,7 @@ public partial class DepartmentsService : IDepartmentsService
         _createDepartmentRequestValidator = createDepartmentRequestValidator;
         _logger = logger;
         _departmentsRepository = departmentsRepository;
+        _locationsRepository = locationsRepository;
     }
     
     public async Task<DepartmentDto> CreateAsync(CreateDepartmentRequest dto, CancellationToken cancellationToken)
@@ -32,6 +36,15 @@ public partial class DepartmentsService : IDepartmentsService
             throw new ValidationException(validationResult.Errors);
         }
 
+        List<Location> locations = [];
+        foreach (var id in dto.LocationIds)
+        {
+            var location = await _locationsRepository.GetByIdAsync(id, cancellationToken)
+                ?? throw new KeyNotFoundException($"Location with id {id} not found");
+            
+            locations.Add(location);
+        }
+        
         Department? parentDepartment = null;
         if (dto.ParentId is not null)
         {
@@ -43,7 +56,13 @@ public partial class DepartmentsService : IDepartmentsService
         
         var department = new Department(dto.Name, slug, parentDepartment);
 
-        var createdDepartmentId = await _departmentsRepository.AddAsync(department, cancellationToken);
+        var departmentLocations = locations.Select(l => new DepartmentLocation(department.Id, l.Id));
+        
+        var createdDepartmentId = await _departmentsRepository.AddAsync(
+            department, 
+            departmentLocations, 
+            cancellationToken
+        );
         
         LogDepartmentCreated(createdDepartmentId);
 

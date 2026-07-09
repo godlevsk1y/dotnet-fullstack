@@ -13,9 +13,14 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
         _context = context;
     }
     
-    public async Task<Guid> AddAsync(Department department, CancellationToken cancellationToken)
+    public async Task<Guid> AddAsync(Department department, IEnumerable<DepartmentLocation> locations, CancellationToken cancellationToken)
     {
         await _context.Departments.AddAsync(department, cancellationToken);
+
+        foreach (var location in locations)
+        {
+            await _context.AddAsync(location, cancellationToken);
+        }
         
         await _context.SaveChangesAsync(cancellationToken);
         
