@@ -101,21 +101,18 @@ public partial class DepartmentsService : IDepartmentsService
             department.ChangeSlug(new Slug(dto.Slug));
         }
 
-        if (dto.ParentId is not null)
+        if (dto.ParentId == Guid.Empty)
         {
-            if (string.IsNullOrEmpty(department.ParentId?.Value.ToString()))
-            {
-                department.SetParent(parent: null);
-            }
-            else
-            {
-                var parentDepartment = await _departmentsRepository.GetByIdAsync(dto.ParentId.Value, cancellationToken)
-                                       ?? throw new KeyNotFoundException(
-                                           $"Parent department with id {dto.ParentId} not found"
-                                       );
-                
-                department.SetParent(parentDepartment);
-            }
+            department.SetParent(parent: null);
+        }
+        else if (dto.ParentId is not null)
+        {
+            var parentDepartment = await _departmentsRepository.GetByIdAsync(dto.ParentId.Value, cancellationToken)
+                                   ?? throw new KeyNotFoundException(
+                                       $"Parent department with id {dto.ParentId} not found"
+                                   );
+        
+            department.SetParent(parentDepartment);
         }
         
         await _departmentsRepository.SaveAsync(cancellationToken);
