@@ -22,6 +22,9 @@ dotnet_diagnostic.CA1515.severity = none
 # CA1031: exception can be specified via
 dotnet_diagnostic.CA1031.severity = none
 
+# CA1716: no need in other languages right now
+dotnet_diagnostic.CA1716.severity = none
+
 # MA0004: ConfigureAwait is unnecessary in ASP.NET Core
 dotnet_diagnostic.MA0004.severity = none
 

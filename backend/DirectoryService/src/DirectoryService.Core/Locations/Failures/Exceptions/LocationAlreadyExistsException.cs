@@ -6,7 +6,7 @@ namespace DirectoryService.Core.Locations.Failures.Exceptions;
 public class LocationAlreadyExistsException : ConflictException
 {
     public LocationAlreadyExistsException(string locationName) 
-        : base([ErrorInfo.Conflict(
+        : base([Error.Conflict(
             "location.already.exists", 
             $"Location '{locationName}' is already exists."),]) { }
 }

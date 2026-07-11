@@ -8,6 +8,6 @@ namespace DirectoryService.Core.Departments.Failures.Exceptions;
 [SuppressMessage("Design", "CA1032:Implement standard exception constructors")]
 public class DepartmentValidationException : BadRequestException
 {
-    public DepartmentValidationException(IEnumerable<ErrorInfo> error) 
+    public DepartmentValidationException(IEnumerable<Error> error) 
         : base(error) { }
 }

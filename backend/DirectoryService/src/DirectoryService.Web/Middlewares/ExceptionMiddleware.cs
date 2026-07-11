@@ -35,15 +35,15 @@ public partial class ExceptionMiddleware
         var (code, errors) = ex switch
         {
             BadRequestException =>
-                (StatusCodes.Status400BadRequest, JsonSerializer.Deserialize<ErrorInfo[]>(ex.Message)),
+                (StatusCodes.Status400BadRequest, JsonSerializer.Deserialize<Error[]>(ex.Message)),
 
             NotFoundException =>
-                (StatusCodes.Status404NotFound, JsonSerializer.Deserialize<ErrorInfo[]>(ex.Message)),
+                (StatusCodes.Status404NotFound, JsonSerializer.Deserialize<Error[]>(ex.Message)),
 
             ConflictException =>
-                (StatusCodes.Status409Conflict, JsonSerializer.Deserialize<ErrorInfo[]>(ex.Message)),
+                (StatusCodes.Status409Conflict, JsonSerializer.Deserialize<Error[]>(ex.Message)),
 
-            _ => (StatusCodes.Status500InternalServerError, [ErrorInfo.Failure(string.Empty, "Something went wrong")]),
+            _ => (StatusCodes.Status500InternalServerError, [Error.Failure(string.Empty, "Something went wrong")]),
         };
         
         context.Response.ContentType = "application/json";

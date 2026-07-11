@@ -5,6 +5,6 @@ namespace DirectoryService.Core.Locations.Failures.Exceptions;
 
 public class LocationValidationException : BadRequestException
 {
-    public LocationValidationException(IEnumerable<ErrorInfo> error) 
+    public LocationValidationException(IEnumerable<Error> error) 
         : base(error) { }
 }

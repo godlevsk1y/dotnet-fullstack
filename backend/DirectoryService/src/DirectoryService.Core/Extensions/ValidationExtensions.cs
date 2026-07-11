@@ -5,6 +5,6 @@ namespace DirectoryService.Core.Extensions;
 
 public static class ValidationExtensions
 {
-    public static IEnumerable<ErrorInfo> ToErrors(this ValidationResult result) =>
-        result.Errors.Select(e => ErrorInfo.Validation(e.ErrorCode, e.ErrorMessage, e.PropertyName));
+    public static IEnumerable<Error> ToErrors(this ValidationResult result) =>
+        result.Errors.Select(e => Error.Validation(e.ErrorCode, e.ErrorMessage, e.PropertyName));
 }
