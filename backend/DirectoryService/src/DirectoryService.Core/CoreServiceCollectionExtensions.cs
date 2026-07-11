@@ -7,10 +7,10 @@ namespace DirectoryService.Core;
 
 public static class CoreServiceCollectionExtensions
 {
-    public static IServiceCollection AddCoreDependencies(this IServiceCollection services)
+    public static IServiceCollection AddCore(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(typeof(CoreServiceCollectionExtensions).Assembly);
-            
+        
         services.AddScoped<ILocationsService, LocationsService>();
         services.AddScoped<IDepartmentsService, DepartmentsService>();
         
