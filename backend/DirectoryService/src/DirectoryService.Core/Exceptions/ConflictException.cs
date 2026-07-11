@@ -5,6 +5,6 @@ namespace DirectoryService.Core.Exceptions;
 
 public class ConflictException : Exception
 {
-    protected ConflictException(ErrorInfo error)
+    protected ConflictException(IEnumerable<ErrorInfo> error)
         : base(JsonSerializer.Serialize(error)) { }
 }

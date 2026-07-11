@@ -19,6 +19,9 @@ dotnet_diagnostic.CA1034.severity = none
 # CA1515: make public class internal – it brakes the controllers
 dotnet_diagnostic.CA1515.severity = none
 
+# CA1031: exception can be specified via
+dotnet_diagnostic.CA1031.severity = none
+
 # MA0004: ConfigureAwait is unnecessary in ASP.NET Core
 dotnet_diagnostic.MA0004.severity = none
 

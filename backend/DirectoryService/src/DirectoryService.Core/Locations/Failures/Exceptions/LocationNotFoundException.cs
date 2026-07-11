@@ -6,7 +6,7 @@ namespace DirectoryService.Core.Locations.Failures.Exceptions;
 public class LocationNotFoundException : NotFoundException
 {
     public LocationNotFoundException(Guid id) 
-        : base(ErrorInfo.NotFound(
+        : base([ErrorInfo.NotFound(
             "location.not.found", 
-            $"Location with id {id} not found.")) { }
+            $"Location with id {id} not found."),]) { }
 }
