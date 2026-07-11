@@ -1,5 +1,8 @@
 using DirectoryService.Contracts.WebApi.Departments;
+using DirectoryService.Core.Departments.Failures.Exceptions;
+using DirectoryService.Core.Extensions;
 using DirectoryService.Core.Locations;
+using DirectoryService.Core.Locations.Failures.Exceptions;
 using DirectoryService.Domain.Models;
 using DirectoryService.Domain.ValueObjects;
 using FluentValidation;
@@ -38,14 +41,14 @@ public partial class DepartmentsService : IDepartmentsService
 
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            throw new DepartmentValidationException(validationResult.ToErrors());
         }
 
         List<Location> locations = [];
-        foreach (var id in dto.LocationIds)
+        foreach (var locationId in dto.LocationIds)
         {
-            var location = await _locationsRepository.GetByIdAsync(id, cancellationToken)
-                ?? throw new KeyNotFoundException($"Location with id {id} not found");
+            var location = await _locationsRepository.GetByIdAsync(locationId, cancellationToken)
+                ?? throw new LocationNotFoundException(locationId);
             
             locations.Add(location);
         }
@@ -54,7 +57,7 @@ public partial class DepartmentsService : IDepartmentsService
         if (dto.ParentId is not null)
         {
             parentDepartment = await _departmentsRepository.GetByIdAsync(dto.ParentId.Value, cancellationToken) 
-                               ?? throw new KeyNotFoundException($"Department with id {dto.ParentId} not found");
+                               ?? throw new DepartmentNotFoundException(dto.ParentId.Value);
         }
 
         var slug = new Slug(dto.Slug);
@@ -85,11 +88,11 @@ public partial class DepartmentsService : IDepartmentsService
         var validationResult = await _updateDepartmentRequestValidator.ValidateAsync(dto, cancellationToken);
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            throw new DepartmentValidationException(validationResult.ToErrors());
         }
 
         var department = await _departmentsRepository.GetByIdWithParentAsync(id, cancellationToken) 
-                         ?? throw new KeyNotFoundException($"Department with id {id} not found");
+                         ?? throw new DepartmentNotFoundException(id);
 
         if (dto.Name is not null)
         {
@@ -108,9 +111,7 @@ public partial class DepartmentsService : IDepartmentsService
         else if (dto.ParentId is not null)
         {
             var parentDepartment = await _departmentsRepository.GetByIdAsync(dto.ParentId.Value, cancellationToken)
-                                   ?? throw new KeyNotFoundException(
-                                       $"Parent department with id {dto.ParentId} not found"
-                                   );
+                                   ?? throw new DepartmentNotFoundException(dto.ParentId.Value);
         
             department.SetParent(parentDepartment);
         }
@@ -123,10 +124,10 @@ public partial class DepartmentsService : IDepartmentsService
     public async Task AddLocationAsync(Guid departmentId, Guid locationId, CancellationToken cancellationToken)
     {
         var department = await _departmentsRepository.GetByIdAsync(departmentId, cancellationToken) 
-                         ?? throw new KeyNotFoundException($"Department with id {departmentId} not found");
+                         ?? throw new DepartmentNotFoundException(departmentId);
         
         var location = await _locationsRepository.GetByIdAsync(locationId, cancellationToken) 
-                       ?? throw new KeyNotFoundException($"Location with id {locationId} not found");
+                       ?? throw new LocationNotFoundException(locationId);
 
         var departmentLocation = new DepartmentLocation(department.Id, location.Id);
         
@@ -145,8 +146,7 @@ public partial class DepartmentsService : IDepartmentsService
     {
         var departmentLocation = await _departmentsRepository
             .GetDepartmentLocation(departmentId, locationId, cancellationToken) ?? 
-            throw new KeyNotFoundException($"Location with id {locationId} does not " +
-                                           $"belong to Department with id {departmentId}");
+            throw new DepartmentLocationNotFoundException(departmentId, locationId);
         
         await _departmentsRepository.RemoveLocationAsync(departmentLocation, cancellationToken);
     }
