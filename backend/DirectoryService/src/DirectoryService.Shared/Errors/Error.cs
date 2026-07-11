@@ -4,14 +4,16 @@ namespace DirectoryService.Shared.Errors;
 
 public record Error
 {
-    public string ErrorCode { get; }
+    public string ErrorCode { get; init; } = string.Empty;
     
-    public string ErrorMessage { get; }
+    public string ErrorMessage { get; init; } = string.Empty;
     
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public ErrorType Type { get; }
+    public ErrorType Type { get; init; }
     
-    public string? InvalidField { get; }
+    public string? InvalidField { get; init; }
+    
+    public Error() {} // JsonSerializer
 
     private Error(string errorCode, string errorMessage, ErrorType type, string? invalidField = null)
     {

@@ -8,5 +8,5 @@ public class LocationAlreadyExistsException : ConflictException
     public LocationAlreadyExistsException(string locationName) 
         : base([Error.Conflict(
             "location.already.exists", 
-            $"Location '{locationName}' is already exists."),]) { }
+            $"Location '{locationName}' already exists."),]) { }
 }

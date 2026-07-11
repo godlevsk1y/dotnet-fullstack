@@ -8,5 +8,5 @@ public class DepartmentLocationNotFoundException : NotFoundException
     public DepartmentLocationNotFoundException(Guid departmentId, Guid locationId) 
         : base([Error.NotFound(
             "department.location.not.found", 
-            $"Location with id {locationId} does not belong to Department with id {{departmentId}}"),]) { }
+            $"Location with id {locationId} does not belong to Department with id {departmentId}"),]) { }
 }
