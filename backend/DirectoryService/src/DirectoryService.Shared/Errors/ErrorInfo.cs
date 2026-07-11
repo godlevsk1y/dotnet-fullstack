@@ -1,10 +1,16 @@
+using System.Text.Json.Serialization;
+
 namespace DirectoryService.Shared.Errors;
 
 public record ErrorInfo
 {
     public string ErrorCode { get; }
+    
     public string ErrorMessage { get; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public ErrorType Type { get; }
+    
     public string? InvalidField { get; }
 
     private ErrorInfo(string errorCode, string errorMessage, ErrorType type, string? invalidField = null)
