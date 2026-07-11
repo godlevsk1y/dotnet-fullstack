@@ -46,6 +46,10 @@ dotnet_diagnostic.S1135.severity = none
 # S1144: unused private members — false positives for EF shadow properties
 dotnet_diagnostic.S1144.severity = none
 
+# Exception constructors
+dotnet_diagnostic.RCS1194.severity = none
+dotnet_diagnostic.CA1032.severity = none
+
 # Rules enforced more strictly than the defaults:
 dotnet_diagnostic.S1125.severity = error  # Redundant Boolean literal
 dotnet_diagnostic.S6673.severity = error  # Serilog template placeholder order
