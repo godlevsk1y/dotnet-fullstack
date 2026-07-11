@@ -1,4 +1,6 @@
 using DirectoryService.Contracts.WebApi.Locations;
+using DirectoryService.Core.Extensions;
+using DirectoryService.Core.Locations.Failures.Exceptions;
 using DirectoryService.Domain.Models;
 using DirectoryService.Domain.ValueObjects;
 using FluentValidation;
@@ -35,14 +37,13 @@ public partial class LocationsService : ILocationsService
 
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            throw new LocationValidationException(validationResult.ToErrors());
         }
 
         var existingLocation = await _locationsRepository.GetByNameAsync(dto.Name, cancellationToken);
         if (existingLocation is not null)
         {
-            // this will be replaced
-            throw new InvalidOperationException("Location must be unique.");
+            throw new LocationAlreadyExistsException(existingLocation.Name);
         }
         
         var location = new Location(
@@ -81,11 +82,11 @@ public partial class LocationsService : ILocationsService
 
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            throw new LocationValidationException(validationResult.ToErrors());
         }
         
         var location = await _locationsRepository.GetByIdAsync(id, cancellationToken) 
-                       ?? throw new KeyNotFoundException($"Location with id {id} not found.");
+                       ?? throw new LocationNotFoundException(id);
 
         var newAddress = new Address(
             country: dto.Country ?? location.Address.Country,

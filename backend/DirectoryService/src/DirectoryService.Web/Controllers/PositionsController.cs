@@ -1,4 +1,3 @@
-using DirectoryService.Contracts.WebApi.Positions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Web.Controllers;

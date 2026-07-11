@@ -19,6 +19,12 @@ dotnet_diagnostic.CA1034.severity = none
 # CA1515: make public class internal – it brakes the controllers
 dotnet_diagnostic.CA1515.severity = none
 
+# CA1031: exception can be specified via
+dotnet_diagnostic.CA1031.severity = none
+
+# CA1716: no need in other languages right now
+dotnet_diagnostic.CA1716.severity = none
+
 # MA0004: ConfigureAwait is unnecessary in ASP.NET Core
 dotnet_diagnostic.MA0004.severity = none
 
@@ -45,6 +51,10 @@ dotnet_diagnostic.S1135.severity = none
 
 # S1144: unused private members — false positives for EF shadow properties
 dotnet_diagnostic.S1144.severity = none
+
+# Exception constructors
+dotnet_diagnostic.RCS1194.severity = none
+dotnet_diagnostic.CA1032.severity = none
 
 # Rules enforced more strictly than the defaults:
 dotnet_diagnostic.S1125.severity = error  # Redundant Boolean literal
