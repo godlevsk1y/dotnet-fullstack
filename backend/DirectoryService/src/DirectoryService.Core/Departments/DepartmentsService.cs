@@ -130,16 +130,13 @@ public partial class DepartmentsService : IDepartmentsService
                        ?? throw new LocationNotFoundException(locationId);
 
         var departmentLocation = new DepartmentLocation(department.Id, location.Id);
+
+        if (await _departmentsRepository.HasDepartmentLocationAsync(departmentLocation, cancellationToken))
+        {
+            throw new DepartmentLocationAlreadyExistsException(departmentId, locationId);
+        }
         
-        try
-        {
-            await _departmentsRepository.AddLocationAsync(departmentLocation, cancellationToken);
-        }
-        catch (InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Location with id {locationId} is already added " +
-                                                $"to Department with id {department.Id}");
-        }
+        await _departmentsRepository.AddLocationAsync(departmentLocation, cancellationToken);
     }
 
     public async Task RemoveLocationAsync(Guid departmentId, Guid locationId, CancellationToken cancellationToken)

@@ -43,7 +43,7 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
         return department;
     }
 
-    public async Task AddLocationAsync(DepartmentLocation departmentLocation, CancellationToken cancellationToken)
+    public async Task<bool> HasDepartmentLocationAsync(DepartmentLocation departmentLocation, CancellationToken cancellationToken)
     {
         var existing = await _context.DepartmentLocations.FirstOrDefaultAsync(
             dl => dl.DepartmentId == departmentLocation.DepartmentId 
@@ -51,12 +51,12 @@ public class EfCoreDepartmentsRepository : IDepartmentsRepository
                   dl.LocationId == departmentLocation.LocationId, 
             cancellationToken
         );
-
-        if (existing is not null)
-        {
-            throw new InvalidOperationException("Unique constraint violation");
-        }
         
+        return existing is not null;
+    }
+
+    public async Task AddLocationAsync(DepartmentLocation departmentLocation, CancellationToken cancellationToken)
+    {
         await _context.DepartmentLocations.AddAsync(departmentLocation, cancellationToken);
         
         await _context.SaveChangesAsync(cancellationToken);
