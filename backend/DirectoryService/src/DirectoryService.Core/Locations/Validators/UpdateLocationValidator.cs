@@ -1,7 +1,7 @@
 using DirectoryService.Contracts.WebApi.Locations;
 using FluentValidation;
 
-namespace DirectoryService.Core.Locations;
+namespace DirectoryService.Core.Locations.Validators;
 
 public class UpdateLocationValidator : AbstractValidator<UpdateLocationRequest>
 {

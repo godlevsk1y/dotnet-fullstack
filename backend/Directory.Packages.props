@@ -7,6 +7,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- HTTP / OpenAPI -->
+    <PackageVersion Include="CSharpFunctionalExtensions" Version="3.7.0" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />

@@ -1,8 +1,9 @@
+using CSharpFunctionalExtensions;
 using DirectoryService.Contracts.WebApi.Locations;
 using DirectoryService.Core.Extensions;
-using DirectoryService.Core.Locations.Failures.Exceptions;
 using DirectoryService.Domain.Models;
 using DirectoryService.Domain.ValueObjects;
+using DirectoryService.Shared.Errors;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
@@ -30,20 +31,20 @@ public partial class LocationsService : ILocationsService
         _logger = logger;
     }
     
-    public async Task<LocationDto> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken)
+    public async Task<Result<LocationDto, Error>> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken)
     {
         var validationResult = await _createLocationRequestValidator
             .ValidateAsync(dto, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            throw new LocationValidationException(validationResult.ToErrors());
+            return validationResult.ToError();
         }
 
         var existingLocation = await _locationsRepository.GetByNameAsync(dto.Name, cancellationToken);
         if (existingLocation is not null)
         {
-            throw new LocationAlreadyExistsException(existingLocation.Name);
+            return LocationErrors.AlreadyExists(existingLocation.Name);
         }
         
         var location = new Location(
@@ -76,17 +77,20 @@ public partial class LocationsService : ILocationsService
         );
     }
 
-    public async Task<Guid> UpdateAsync(Guid id, UpdateLocationRequest dto, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Error>> UpdateAsync(Guid id, UpdateLocationRequest dto, CancellationToken cancellationToken)
     {
         var validationResult = await _updateLocationRequestValidator.ValidateAsync(dto, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            throw new LocationValidationException(validationResult.ToErrors());
+            return validationResult.ToError();
         }
-        
-        var location = await _locationsRepository.GetByIdAsync(id, cancellationToken) 
-                       ?? throw new LocationNotFoundException(id);
+
+        var location = await _locationsRepository.GetByIdAsync(id, cancellationToken);
+        if (location is null)
+        {
+            return LocationErrors.NotFound(id);
+        }
 
         var newAddress = new Address(
             country: dto.Country ?? location.Address.Country,
@@ -102,7 +106,7 @@ public partial class LocationsService : ILocationsService
         
         await _locationsRepository.SaveAsync(cancellationToken);
         
-        return location.Id;
+        return location.Id.Value;
     }
     
     [LoggerMessage(
