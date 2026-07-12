@@ -13,7 +13,8 @@ public record Error
     
     public string? InvalidField { get; init; }
     
-    public Error() {} // JsonSerializer
+    [JsonConstructor]
+    public Error() {}
 
     private Error(string errorCode, string errorMessage, ErrorType type, string? invalidField = null)
     {
