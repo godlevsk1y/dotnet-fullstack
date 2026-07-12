@@ -1,5 +1,6 @@
 using DirectoryService.Contracts.WebApi.Locations;
 using DirectoryService.Core.Locations;
+using DirectoryService.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Web.Controllers;
@@ -16,27 +17,35 @@ public class LocationsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<LocationDto>> Create(
+    public async Task<IActionResult> Create(
         [FromBody] CreateLocationRequest request, 
         CancellationToken cancellationToken)
     {
-        var locationDto = await _locationsService.CreateAsync(request, cancellationToken);
+        var createResult = await _locationsService.CreateAsync(request, cancellationToken);
+        if (createResult.IsFailure)
+        {
+            return createResult.Error.ToResponse();
+        }
         
         return Created(
-            new Uri($"/api/locations/{locationDto}", UriKind.Relative),
-            locationDto
+            new Uri($"/api/locations/{createResult.Value.Id}", UriKind.Relative),
+            createResult.Value
         );
     }
 
 
     [HttpPatch("{id:guid}")]
-    public async Task<ActionResult<Guid>> Update(
+    public async Task<IActionResult> Update(
         [FromRoute] Guid id,
         [FromBody] UpdateLocationRequest request,
         CancellationToken cancellationToken)
     {
-        var locationId = await _locationsService.UpdateAsync(id, request, cancellationToken);
+        var updateResult = await _locationsService.UpdateAsync(id, request, cancellationToken);
+        if (updateResult.IsFailure)
+        {
+            return updateResult.Error.ToResponse();
+        }
         
-        return Ok(locationId);
+        return Ok(updateResult.Value);
     }
 }
