@@ -23,4 +23,7 @@ public record Error
     
     public static Error Failure(params IEnumerable<ErrorMessage> messages) =>
         new(messages, ErrorType.Failure);
+    
+    public static Error Internal(params IEnumerable<ErrorMessage> messages) =>
+        new(messages, ErrorType.Internal);
 }

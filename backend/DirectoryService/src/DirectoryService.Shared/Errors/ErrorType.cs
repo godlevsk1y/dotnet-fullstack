@@ -21,4 +21,8 @@ public enum ErrorType
     /// Indicates a conflict, such as a duplicate resource.
     /// </summary>
     Conflict,
+    /// <summary>
+    /// Indicates an internal server error.
+    /// </summary>
+    Internal,
 }

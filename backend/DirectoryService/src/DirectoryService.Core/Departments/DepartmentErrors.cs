@@ -9,6 +9,10 @@ public static class DepartmentErrors
     
     public static Error LocationAlreadyAdded(Guid departmentId, Guid locationId) =>
         Error.NotFound(new ErrorMessage(
-            "department.location.already.attached", 
-            $"Department with id '{departmentId}' already has Location with id '{locationId}' attached"));
+            "department.location.already.added", 
+            $"Department with id '{departmentId}' already has Location with id '{locationId}' added"));
+    
+    public static Error DepartmentLocationNotFound(Guid departmentId, Guid locationId) =>
+        Error.NotFound(new ErrorMessage("department.location.not.found",
+            $"Department with id '{departmentId}' does not have Location with id '{locationId}'"));
 }

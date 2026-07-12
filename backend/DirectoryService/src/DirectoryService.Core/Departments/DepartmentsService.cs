@@ -1,9 +1,7 @@
 using CSharpFunctionalExtensions;
 using DirectoryService.Contracts.WebApi.Departments;
-using DirectoryService.Core.Departments.Failures.Exceptions;
 using DirectoryService.Core.Extensions;
 using DirectoryService.Core.Locations;
-using DirectoryService.Core.Locations.Failures.Exceptions;
 using DirectoryService.Domain.Models;
 using DirectoryService.Domain.ValueObjects;
 using DirectoryService.Shared.Errors;
@@ -158,15 +156,23 @@ public partial class DepartmentsService : IDepartmentsService
         }
         
         await _departmentsRepository.AddLocationAsync(departmentLocation, cancellationToken);
+        
+        return UnitResult.Success<Error>();
     }
 
-    public async Task RemoveLocationAsync(Guid departmentId, Guid locationId, CancellationToken cancellationToken)
+    public async Task<UnitResult<Error>> RemoveLocationAsync(Guid departmentId, Guid locationId, CancellationToken cancellationToken)
     {
         var departmentLocation = await _departmentsRepository
-            .GetDepartmentLocation(departmentId, locationId, cancellationToken) ?? 
-            throw new DepartmentLocationNotFoundException(departmentId, locationId);
+            .GetDepartmentLocation(departmentId, locationId, cancellationToken);
+        
+        if (departmentLocation is null)
+        {
+            return DepartmentErrors.DepartmentLocationNotFound(departmentId, locationId);
+        }
         
         await _departmentsRepository.RemoveLocationAsync(departmentLocation, cancellationToken);
+        
+        return UnitResult.Success<Error>();
     }
 
     [LoggerMessage(
