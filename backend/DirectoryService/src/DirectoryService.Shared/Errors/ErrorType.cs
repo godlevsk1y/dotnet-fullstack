@@ -25,4 +25,8 @@ public enum ErrorType
     /// Indicates an internal server error.
     /// </summary>
     Internal,
+    /// <summary>
+    /// Indicates a domain error.
+    /// </summary>
+    Domain,
 }

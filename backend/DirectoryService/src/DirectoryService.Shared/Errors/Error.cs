@@ -26,4 +26,7 @@ public record Error
     
     public static Error Internal(params IEnumerable<ErrorMessage> messages) =>
         new(messages, ErrorType.Internal);
+    
+    public static Error Domain(params IEnumerable<ErrorMessage> messages) =>
+        new(messages, ErrorType.Domain);
 }
