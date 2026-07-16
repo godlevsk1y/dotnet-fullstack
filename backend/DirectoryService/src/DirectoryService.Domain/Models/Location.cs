@@ -21,23 +21,23 @@ public class Location
     
     private Location() { } // EF Core
     
-    private Location(LocationId id, string name, Address address, DateTime createdAt, DateTime updatedAt)
+    private Location(LocationId id, string name, Address address)
     {
         Id = id;
         
         Name = name;
         Address = address;
         
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 
-    public static Result<Location, Error> Create(string name, Address address, DateTime createdAt, DateTime updatedAt)
+    public static Result<Location, Error> Create(string name, Address address)
     {
         if (string.IsNullOrWhiteSpace(name))
             return ModelErrors.Location.NameEmpty();
         
-        return new Location(new LocationId(Guid.NewGuid()), name, address, createdAt, updatedAt);
+        return new Location(new LocationId(Guid.NewGuid()), name, address);
     }
     
     public void Update(string name, Address address)

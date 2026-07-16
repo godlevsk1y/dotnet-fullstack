@@ -66,14 +66,22 @@ public partial class DepartmentsService : IDepartmentsService
             }
         }
 
-        var slug = new Slug(dto.Slug);
+        var slugResult = Slug.Create(dto.Slug);
+        if (slugResult.IsFailure)
+        {
+            return slugResult.Error;
+        }
         
-        var department = new Department(dto.Name, slug, parentDepartment);
+        var departmentResult = Department.Create(dto.Name, slugResult.Value, parentDepartment);
+        if (departmentResult.IsFailure)
+        {
+            return departmentResult.Error;
+        }
 
-        var departmentLocations = locations.Select(l => new DepartmentLocation(department.Id, l.Id));
+        var departmentLocations = locations.Select(l => new DepartmentLocation(departmentResult.Value.Id, l.Id));
         
         var createdDepartmentId = await _departmentsRepository.AddAsync(
-            department, 
+            departmentResult.Value, 
             departmentLocations, 
             cancellationToken
         );
@@ -82,10 +90,10 @@ public partial class DepartmentsService : IDepartmentsService
 
         return new DepartmentDto(
             createdDepartmentId,
-            department.Name,
-            department.Slug,
-            department.Path.Value,
-            department.ParentId?.Value
+            departmentResult.Value.Name,
+            departmentResult.Value.Slug,
+            departmentResult.Value.Path.Value,
+            departmentResult.Value.ParentId?.Value
         );
     }
 
@@ -110,7 +118,13 @@ public partial class DepartmentsService : IDepartmentsService
 
         if (dto.Slug is not null)
         {
-            department.ChangeSlug(new Slug(dto.Slug));
+            var slugResult = Slug.Create(dto.Slug);
+            if (slugResult.IsFailure)
+            {
+                return slugResult.Error;
+            }
+            
+            department.ChangeSlug(slugResult.Value);
         }
 
         if (dto.ParentId == Guid.Empty)

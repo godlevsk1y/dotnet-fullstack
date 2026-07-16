@@ -46,34 +46,44 @@ public partial class LocationsService : ILocationsService
         {
             return LocationErrors.AlreadyExists(existingLocation.Name);
         }
-        
-        var location = new Location(
-            dto.Name,
-            new Address(
-                country: dto.Country,
-                region: dto.Region,
-                city: dto.City,
-                district: dto.District,
-                street: dto.Street,
-                houseNumber: dto.HouseNumber,
-                postalCode: dto.PostalCode
-            )
+
+        var addressResult = Address.Create(
+            country: dto.Country,
+            region: dto.Region,
+            city: dto.City,
+            district: dto.District,
+            street: dto.Street,
+            houseNumber: dto.HouseNumber,
+            postalCode: dto.PostalCode
         );
+        if (addressResult.IsFailure)
+        {
+            return addressResult.Error;
+        }
         
-        await _locationsRepository.AddAsync(location, cancellationToken);
+        var locationResult = Location.Create(
+            dto.Name,
+            addressResult.Value
+        );
+        if (locationResult.IsFailure)
+        {
+            return locationResult.Error;
+        }
         
-        LogLocationCreated(location.Id);
+        await _locationsRepository.AddAsync(locationResult.Value, cancellationToken);
+        
+        LogLocationCreated(locationResult.Value.Id);
         
         return new LocationDto(
-            Id: location.Id,
-            Name: location.Name,
-            Country: location.Address.Country,
-            Region: location.Address.Region,
-            City: location.Address.City,
-            District: location.Address.District,
-            Street: location.Address.Street,
-            HouseNumber: location.Address.HouseNumber,
-            PostalCode: location.Address.PostalCode
+            Id: locationResult.Value.Id,
+            Name: locationResult.Value.Name,
+            Country: locationResult.Value.Address.Country,
+            Region: locationResult.Value.Address.Region,
+            City: locationResult.Value.Address.City,
+            District: locationResult.Value.Address.District,
+            Street: locationResult.Value.Address.Street,
+            HouseNumber: locationResult.Value.Address.HouseNumber,
+            PostalCode: locationResult.Value.Address.PostalCode
         );
     }
 
@@ -92,17 +102,21 @@ public partial class LocationsService : ILocationsService
             return LocationErrors.NotFound(id);
         }
 
-        var newAddress = new Address(
+        var newRegion = dto.Region?.Length == 0 ? null : dto.Region;
+        var newDistrict = dto.District?.Length == 0 ? null : dto.District;
+        var newPostalCode = dto.PostalCode?.Length == 0 ? null : dto.PostalCode;
+        
+        var newAddressResult = Address.Create(
             country: dto.Country ?? location.Address.Country,
-            region: dto.Region ?? location.Address.Region,
+            region: newRegion ?? location.Address.Region,
             city: dto.City ?? location.Address.City,
-            district: dto.District ?? location.Address.District,
+            district: newDistrict ?? location.Address.District,
             street: dto.Street ?? location.Address.Street,
             houseNumber: dto.HouseNumber ?? location.Address.HouseNumber,
-            postalCode: dto.PostalCode ?? location.Address.PostalCode
+            postalCode: newPostalCode ?? location.Address.PostalCode
         );
         
-        location.Update(dto.Name ?? location.Name, newAddress);
+        location.Update(dto.Name ?? location.Name, newAddressResult.Value);
         
         await _locationsRepository.SaveAsync(cancellationToken);
         
