@@ -8,7 +8,7 @@ public static class DepartmentErrors
         Error.NotFound(new ErrorMessage("department.not.found", $"Department with id '{id}' was not found"));
     
     public static Error LocationAlreadyAdded(Guid departmentId, Guid locationId) =>
-        Error.NotFound(new ErrorMessage(
+        Error.Conflict(new ErrorMessage(
             "department.location.already.added", 
             $"Department with id '{departmentId}' already has Location with id '{locationId}' added"));
     
