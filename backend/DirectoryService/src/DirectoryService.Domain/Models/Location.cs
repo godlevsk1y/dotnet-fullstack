@@ -40,13 +40,18 @@ public class Location
         return new Location(new LocationId(Guid.NewGuid()), name, address);
     }
     
-    public void Update(string name, Address address)
+    public UnitResult<Error> Update(string name, Address address)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return ModelErrors.Location.NameEmpty();
+        }
         
         Name = name;
         Address = address;
         
         UpdatedAt = DateTime.UtcNow;
+        
+        return UnitResult.Success<Error>();
     }
 }

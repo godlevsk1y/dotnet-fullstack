@@ -120,7 +120,11 @@ public partial class LocationsService : ILocationsService
             return newAddressResult.Error;
         }
         
-        location.Update(dto.Name ?? location.Name, newAddressResult.Value);
+        var updateResult = location.Update(dto.Name ?? location.Name, newAddressResult.Value);
+        if (updateResult.IsFailure)
+        {
+            return updateResult.Error;
+        }
         
         await _locationsRepository.SaveAsync(cancellationToken);
         
