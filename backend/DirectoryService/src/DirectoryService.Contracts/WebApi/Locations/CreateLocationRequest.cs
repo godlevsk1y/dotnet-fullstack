@@ -3,10 +3,10 @@ namespace DirectoryService.Contracts.WebApi.Locations;
 public record CreateLocationRequest(
     string Name,
     string Country,
-    string Region,
+    string? Region,
     string City,
-    string District,
+    string? District,
     string Street,
     string HouseNumber,
-    string PostalCode
+    string? PostalCode
 );

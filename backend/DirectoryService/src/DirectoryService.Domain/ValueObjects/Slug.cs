@@ -1,5 +1,8 @@
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 using DirectoryService.Domain.Models;
+using DirectoryService.Domain.ValueObjects.Errors;
+using DirectoryService.Shared.Errors;
 
 namespace DirectoryService.Domain.ValueObjects;
 
@@ -61,24 +64,24 @@ public partial record Slug
     /// The slug value. Must not be null or whitespace and must match the slug format:
     /// only lowercase letters, digits, and hyphens (not at start or end).
     /// </param>
-    /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="value"/> is null, whitespace, or does not match 
-    /// the required slug format.
-    /// </exception>
-    public Slug(string value)
+    private Slug(string value)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(value);
+        Value = value;
+    }
 
-        if (!SlugRegex().IsMatch(value))
+    public static Result<Slug, Error> Create(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentException(
-                "Slug must only contain lowercase latin letter, digits and hyphens, " +
-                "which cannot be the first or the last symbol.", 
-                nameof(value)
-            );
+            return ValueObjectErrors.Slug.Empty();
         }
         
-        Value = value;
+        if (!SlugRegex().IsMatch(value))
+        {
+            return ValueObjectErrors.Slug.Invalid();
+        }
+        
+        return new Slug(value);
     }
 
     public static implicit operator string(Slug slug) => slug.Value;

@@ -1,4 +1,7 @@
+using CSharpFunctionalExtensions;
 using DirectoryService.Domain.Models;
+using DirectoryService.Domain.ValueObjects.Errors;
+using DirectoryService.Shared.Errors;
 
 namespace DirectoryService.Domain.ValueObjects;
 
@@ -48,7 +51,7 @@ public record Address
     /// </summary>
     /// <value>A string representing the region, state, or province name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string Region { get; }
+    public string? Region { get; }
     
     /// <summary>
     /// Gets the city of the address.
@@ -62,7 +65,7 @@ public record Address
     /// </summary>
     /// <value>A string representing the district or neighborhood name.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string District { get; }
+    public string? District { get; }
     
     /// <summary>
     /// Gets the street name of the address.
@@ -83,7 +86,7 @@ public record Address
     /// </summary>
     /// <value>A string representing the postal or ZIP code.</value>
     /// <remarks>This field is required and cannot be null or whitespace.</remarks>
-    public string PostalCode { get; }
+    public string? PostalCode { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Address"/> value object.
@@ -98,23 +101,15 @@ public record Address
     /// <exception cref="ArgumentException">
     /// Thrown when any of the parameters is null or whitespace.
     /// </exception>
-    public Address(
+    private Address(
         string country, 
-        string region,
+        string? region,
         string city, 
-        string district,
+        string? district,
         string street, 
         string houseNumber,
-        string postalCode)
+        string? postalCode)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(country);
-        ArgumentException.ThrowIfNullOrWhiteSpace(region);
-        ArgumentException.ThrowIfNullOrWhiteSpace(city);
-        ArgumentException.ThrowIfNullOrWhiteSpace(district);
-        ArgumentException.ThrowIfNullOrWhiteSpace(street);
-        ArgumentException.ThrowIfNullOrWhiteSpace(houseNumber);
-        ArgumentException.ThrowIfNullOrWhiteSpace(postalCode);
-
         Country = country;
         Region = region;
         City = city;
@@ -122,5 +117,24 @@ public record Address
         Street = street;
         HouseNumber = houseNumber;
         PostalCode = postalCode;
+    }
+
+    public static Result<Address, Error> Create(
+        string country, string? region, string city, string? district,
+        string street, string houseNumber, string? postalCode)
+    {
+        if (string.IsNullOrWhiteSpace(country))
+            return ValueObjectErrors.Address.CountryEmpty();
+        
+        if (string.IsNullOrWhiteSpace(city))
+            return ValueObjectErrors.Address.CityEmpty();
+        
+        if (string.IsNullOrWhiteSpace(street))
+            return ValueObjectErrors.Address.StreetEmpty();
+        
+        if (string.IsNullOrWhiteSpace(houseNumber))
+            return ValueObjectErrors.Address.HouseNumberEmpty();
+        
+        return new Address(country, region, city, district, street, houseNumber, postalCode);
     }
 }

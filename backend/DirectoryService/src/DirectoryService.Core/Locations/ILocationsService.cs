@@ -1,10 +1,12 @@
+using CSharpFunctionalExtensions;
 using DirectoryService.Contracts.WebApi.Locations;
+using DirectoryService.Shared.Errors;
 
 namespace DirectoryService.Core.Locations;
 
 public interface ILocationsService
 {
-    Task<LocationDto> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken);
+    Task<Result<LocationDto, Error>> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken);
 
-    Task<Guid> UpdateAsync(Guid id, UpdateLocationRequest dto, CancellationToken cancellationToken);
+    Task<Result<Guid, Error>> UpdateAsync(Guid id, UpdateLocationRequest dto, CancellationToken cancellationToken);
 }

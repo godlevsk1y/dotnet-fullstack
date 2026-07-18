@@ -1,8 +1,9 @@
+using CSharpFunctionalExtensions;
 using DirectoryService.Contracts.WebApi.Locations;
 using DirectoryService.Core.Extensions;
-using DirectoryService.Core.Locations.Failures.Exceptions;
 using DirectoryService.Domain.Models;
 using DirectoryService.Domain.ValueObjects;
+using DirectoryService.Shared.Errors;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
@@ -30,79 +31,104 @@ public partial class LocationsService : ILocationsService
         _logger = logger;
     }
     
-    public async Task<LocationDto> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken)
+    public async Task<Result<LocationDto, Error>> CreateAsync(CreateLocationRequest dto, CancellationToken cancellationToken)
     {
         var validationResult = await _createLocationRequestValidator
             .ValidateAsync(dto, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            throw new LocationValidationException(validationResult.ToErrors());
+            return validationResult.ToError();
         }
 
         var existingLocation = await _locationsRepository.GetByNameAsync(dto.Name, cancellationToken);
         if (existingLocation is not null)
         {
-            throw new LocationAlreadyExistsException(existingLocation.Name);
+            return LocationErrors.AlreadyExists(existingLocation.Name);
+        }
+
+        var addressResult = Address.Create(
+            country: dto.Country,
+            region: dto.Region,
+            city: dto.City,
+            district: dto.District,
+            street: dto.Street,
+            houseNumber: dto.HouseNumber,
+            postalCode: dto.PostalCode
+        );
+        if (addressResult.IsFailure)
+        {
+            return addressResult.Error;
         }
         
-        var location = new Location(
+        var locationResult = Location.Create(
             dto.Name,
-            new Address(
-                country: dto.Country,
-                region: dto.Region,
-                city: dto.City,
-                district: dto.District,
-                street: dto.Street,
-                houseNumber: dto.HouseNumber,
-                postalCode: dto.PostalCode
-            )
+            addressResult.Value
         );
+        if (locationResult.IsFailure)
+        {
+            return locationResult.Error;
+        }
         
-        await _locationsRepository.AddAsync(location, cancellationToken);
+        await _locationsRepository.AddAsync(locationResult.Value, cancellationToken);
         
-        LogLocationCreated(location.Id);
+        LogLocationCreated(locationResult.Value.Id);
         
         return new LocationDto(
-            Id: location.Id,
-            Name: location.Name,
-            Country: location.Address.Country,
-            Region: location.Address.Region,
-            City: location.Address.City,
-            District: location.Address.District,
-            Street: location.Address.Street,
-            HouseNumber: location.Address.HouseNumber,
-            PostalCode: location.Address.PostalCode
+            Id: locationResult.Value.Id,
+            Name: locationResult.Value.Name,
+            Country: locationResult.Value.Address.Country,
+            Region: locationResult.Value.Address.Region,
+            City: locationResult.Value.Address.City,
+            District: locationResult.Value.Address.District,
+            Street: locationResult.Value.Address.Street,
+            HouseNumber: locationResult.Value.Address.HouseNumber,
+            PostalCode: locationResult.Value.Address.PostalCode
         );
     }
 
-    public async Task<Guid> UpdateAsync(Guid id, UpdateLocationRequest dto, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Error>> UpdateAsync(Guid id, UpdateLocationRequest dto, CancellationToken cancellationToken)
     {
         var validationResult = await _updateLocationRequestValidator.ValidateAsync(dto, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            throw new LocationValidationException(validationResult.ToErrors());
+            return validationResult.ToError();
         }
-        
-        var location = await _locationsRepository.GetByIdAsync(id, cancellationToken) 
-                       ?? throw new LocationNotFoundException(id);
 
-        var newAddress = new Address(
+        var location = await _locationsRepository.GetByIdAsync(id, cancellationToken);
+        if (location is null)
+        {
+            return LocationErrors.NotFound(id);
+        }
+
+        var newRegion = dto.Region?.Length == 0 ? null : dto.Region;
+        var newDistrict = dto.District?.Length == 0 ? null : dto.District;
+        var newPostalCode = dto.PostalCode?.Length == 0 ? null : dto.PostalCode;
+        
+        var newAddressResult = Address.Create(
             country: dto.Country ?? location.Address.Country,
-            region: dto.Region ?? location.Address.Region,
+            region: newRegion ?? location.Address.Region,
             city: dto.City ?? location.Address.City,
-            district: dto.District ?? location.Address.District,
+            district: newDistrict ?? location.Address.District,
             street: dto.Street ?? location.Address.Street,
             houseNumber: dto.HouseNumber ?? location.Address.HouseNumber,
-            postalCode: dto.PostalCode ?? location.Address.PostalCode
+            postalCode: newPostalCode ?? location.Address.PostalCode
         );
+        if (newAddressResult.IsFailure)
+        {
+            return newAddressResult.Error;
+        }
         
-        location.Update(dto.Name ?? location.Name, newAddress);
+        var updateResult = location.Update(dto.Name ?? location.Name, newAddressResult.Value);
+        if (updateResult.IsFailure)
+        {
+            return updateResult.Error;
+        }
         
         await _locationsRepository.SaveAsync(cancellationToken);
         
-        return location.Id;
+        return location.Id.Value;
     }
     
     [LoggerMessage(

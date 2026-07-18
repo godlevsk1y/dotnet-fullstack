@@ -52,17 +52,6 @@ public record Path
     public string Value { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Path"/> value object from a root slug.
-    /// </summary>
-    /// <param name="slug">The root <see cref="Slug"/> for this path.</param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="slug"/> is <c>null</c>.</exception>
-    public Path(Slug slug)
-    {
-        ArgumentNullException.ThrowIfNull(slug);
-        Value = slug.Value;
-    }
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="Path"/> value object from a string value.
     /// </summary>
     /// <param name="value">The string value of the path.</param>
@@ -72,6 +61,8 @@ public record Path
         ArgumentException.ThrowIfNullOrWhiteSpace(value);
         Value = value;
     }
+
+    public static Path Create(Slug slug) => new(slug.Value);
 
     /// <summary>
     /// Appends a slug segment to the current path, creating a new path.
@@ -89,7 +80,6 @@ public record Path
     {
         return new Path($"{Value}/{slug.Value}");
     }
-    
     
     public override string ToString() => Value;
 }

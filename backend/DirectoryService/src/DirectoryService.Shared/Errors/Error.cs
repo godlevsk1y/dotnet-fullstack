@@ -1,37 +1,32 @@
-using System.Text.Json.Serialization;
-
 namespace DirectoryService.Shared.Errors;
 
 public record Error
 {
-    public string ErrorCode { get; init; } = string.Empty;
+    public IReadOnlyList<ErrorMessage> Messages { get; } = [];
     
-    public string ErrorMessage { get; init; } = string.Empty;
-    
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public ErrorType Type { get; init; }
-    
-    public string? InvalidField { get; init; }
-    
-    public Error() {} // JsonSerializer
+    public ErrorType Type { get; }
 
-    private Error(string errorCode, string errorMessage, ErrorType type, string? invalidField = null)
+    private Error(IEnumerable<ErrorMessage> messages, ErrorType errorType)
     {
-        ErrorCode = errorCode;
-        ErrorMessage = errorMessage;
-        Type = type;
-        InvalidField = invalidField;
+        Messages = messages.ToArray();
+        Type = errorType;
     }
     
-    public static Error Failure(string errorCode, string errorMessage)
-        => new(errorCode, errorMessage, ErrorType.Failure);
+    public static Error Validation(params IEnumerable<ErrorMessage> messages) =>
+        new(messages, ErrorType.Validation);
     
-    public static Error Validation(string errorCode, string errorMessage, string field)
-        => new(errorCode, errorMessage, ErrorType.Validation, field);
+    public static Error NotFound(params IEnumerable<ErrorMessage> messages) =>
+        new(messages, ErrorType.NotFound);
     
-    public static Error NotFound(string errorCode, string errorMessage)
-        => new(errorCode, errorMessage, ErrorType.NotFound);
+    public static Error Conflict(params IEnumerable<ErrorMessage> messages) =>
+        new(messages, ErrorType.Conflict);
     
-    public static Error Conflict(string errorCode, string errorMessage)
-        => new(errorCode, errorMessage, ErrorType.Conflict);
+    public static Error Failure(params IEnumerable<ErrorMessage> messages) =>
+        new(messages, ErrorType.Failure);
+    
+    public static Error Internal(params IEnumerable<ErrorMessage> messages) =>
+        new(messages, ErrorType.Internal);
+    
+    public static Error Domain(params IEnumerable<ErrorMessage> messages) =>
+        new(messages, ErrorType.Domain);
 }
