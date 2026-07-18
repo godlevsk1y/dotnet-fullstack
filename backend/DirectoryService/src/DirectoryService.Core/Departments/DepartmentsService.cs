@@ -147,7 +147,11 @@ public partial class DepartmentsService : IDepartmentsService
                 return DepartmentErrors.NotFound(dto.ParentId.Value);
             }
         
-            department.SetParent(parentDepartment);
+            var setParentResult = department.SetParent(parentDepartment);
+            if (setParentResult.IsFailure)
+            {
+                return setParentResult.Error;
+            }
         }
         
         await _departmentsRepository.SaveAsync(cancellationToken);

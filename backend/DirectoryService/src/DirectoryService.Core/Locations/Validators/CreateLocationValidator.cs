@@ -47,7 +47,7 @@ public class CreateLocationValidator : AbstractValidator<CreateLocationRequest>
             .MaximumLength(60)
                 .WithErrorCode("location.district.too.long")
                 .WithMessage("District must not exceed 60 characters")
-            .When(x => x.Region is not null);
+            .When(x => x.District is not null);
         
         RuleFor(x => x.Street)
             .NotEmpty()
@@ -75,6 +75,6 @@ public class CreateLocationValidator : AbstractValidator<CreateLocationRequest>
             .Matches(@"^\d{6}$")
                 .WithErrorCode("location.postalcode.too.long")
                 .WithMessage("Postal code must contain 6 digits")
-            .When(x => x.Region is not null);
+            .When(x => x.PostalCode is not null);
     }
 }
