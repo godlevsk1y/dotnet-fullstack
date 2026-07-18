@@ -113,7 +113,11 @@ public partial class DepartmentsService : IDepartmentsService
 
         if (dto.Name is not null)
         {
-            department.Rename(dto.Name);
+            var renameResult = department.Rename(dto.Name);
+            if (renameResult.IsFailure)
+            {
+                return renameResult.Error;
+            }
         }
 
         if (dto.Slug is not null)
@@ -129,7 +133,11 @@ public partial class DepartmentsService : IDepartmentsService
 
         if (dto.ParentId == Guid.Empty)
         {
-            department.SetParent(parent: null);
+            var setParentResult = department.SetParent(parent: null);
+            if (setParentResult.IsFailure)
+            {
+                return setParentResult.Error;
+            }
         }
         else if (dto.ParentId is not null)
         {

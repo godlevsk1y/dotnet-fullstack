@@ -115,6 +115,10 @@ public partial class LocationsService : ILocationsService
             houseNumber: dto.HouseNumber ?? location.Address.HouseNumber,
             postalCode: newPostalCode ?? location.Address.PostalCode
         );
+        if (newAddressResult.IsFailure)
+        {
+            return newAddressResult.Error;
+        }
         
         location.Update(dto.Name ?? location.Name, newAddressResult.Value);
         
