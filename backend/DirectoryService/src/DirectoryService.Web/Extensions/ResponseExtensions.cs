@@ -20,7 +20,7 @@ public static class ResponseExtensions
         {
             ErrorType.Internal or ErrorType.Failure => StatusCodes.Status500InternalServerError,
             ErrorType.Validation => StatusCodes.Status400BadRequest,
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.NotFound or ErrorType.Domain => StatusCodes.Status404NotFound,
             ErrorType.Conflict => StatusCodes.Status409Conflict,
             _ => StatusCodes.Status500InternalServerError,
         };
