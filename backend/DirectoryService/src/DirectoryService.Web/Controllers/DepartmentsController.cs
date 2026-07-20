@@ -1,6 +1,6 @@
 using DirectoryService.Contracts.WebApi.Departments;
 using DirectoryService.Core.Departments;
-using DirectoryService.Web.Extensions;
+using DirectoryService.Web.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Web.Controllers;
@@ -17,23 +17,23 @@ public class DepartmentsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateDepartmentRequest request, 
+    public async Task<IResult> Create([FromBody] CreateDepartmentRequest request, 
         CancellationToken cancellationToken)
     {
         var createResult = await _departmentsService.CreateAsync(request, cancellationToken);
         if (createResult.IsFailure)
         {
-            return createResult.Error.ToResponse();
+            return EndpointResults.Error(createResult.Error);
         }
         
-        return Created(
-            new Uri($"/api/departments/{createResult.Value.Id}", UriKind.Relative), 
+        return EndpointResults.Created(
+            $"/api/departments/{createResult.Value.Id}",
             createResult.Value
         );
     }
 
     [HttpPatch("{id:guid}")]
-    public async Task<IActionResult> Update(
+    public async Task<IResult> Update(
         [FromRoute] Guid id,
         [FromBody] UpdateDepartmentRequest request,
         CancellationToken cancellationToken)
@@ -41,14 +41,14 @@ public class DepartmentsController : ControllerBase
         var updateResult = await _departmentsService.UpdateAsync(id, request, cancellationToken);
         if (updateResult.IsFailure)
         {
-            return updateResult.Error.ToResponse();
+            return EndpointResults.Error(updateResult.Error);
         }
         
-        return Ok(updateResult.Value);
+        return EndpointResults.Ok(updateResult.Value);
     }
 
     [HttpPost("{departmentId:guid}/locations/{locationId:guid}")]
-    public async Task<IActionResult> AddLocationAsync(
+    public async Task<IResult> AddLocationAsync(
         [FromRoute] Guid departmentId, 
         [FromRoute] Guid locationId,
         CancellationToken cancellationToken)
@@ -56,24 +56,24 @@ public class DepartmentsController : ControllerBase
         var addResult = await _departmentsService.AddLocationAsync(departmentId, locationId, cancellationToken);
         if (addResult.IsFailure)
         {
-            return addResult.Error.ToResponse();
+            return EndpointResults.Error(addResult.Error);
         }
         
-        return Ok();
+        return EndpointResults.NoContent();
     }
 
     [HttpDelete("{departmentId:guid}/locations/{locationId:guid}")]
-    public async Task<IActionResult> RemoveLocationAsync(
+    public async Task<IResult> RemoveLocationAsync(
         [FromRoute] Guid departmentId,
         [FromRoute] Guid locationId,
         CancellationToken cancellationToken)
     {
-        var removeLocation = await _departmentsService.RemoveLocationAsync(departmentId, locationId, cancellationToken);
-        if (removeLocation.IsFailure)
+        var removeResult = await _departmentsService.RemoveLocationAsync(departmentId, locationId, cancellationToken);
+        if (removeResult.IsFailure)
         {
-            return removeLocation.Error.ToResponse();
+            return EndpointResults.Error(removeResult.Error);
         }
         
-        return NoContent();
+        return EndpointResults.NoContent();
     }
 }

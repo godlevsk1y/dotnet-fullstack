@@ -7,6 +7,12 @@ dotnet_analyzer_diagnostic.category-security.severity = error
 # (the framework manages the synchronization context itself)
 dotnet_diagnostic.CA2007.severity = none
 
+# CA1000: static members on generic types
+dotnet_diagnostic.CA1000.severity = none
+
+# MA0018: static members on generic types
+dotnet_diagnostic.MA0018.severity = none
+
 # CA1062: null argument validation is handled by nullable reference types
 dotnet_diagnostic.CA1062.severity = none
 
