@@ -1,6 +1,5 @@
 using DirectoryService.Contracts.WebApi.Locations;
 using DirectoryService.Core.Locations;
-using DirectoryService.Web.Extensions;
 using DirectoryService.Web.Results;
 using Microsoft.AspNetCore.Mvc;
 
