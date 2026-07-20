@@ -5,13 +5,13 @@ namespace DirectoryService.Web.Results;
 
 public record Envelope
 {
-    public object? Result { get; set; }
+    public object? Result { get; init; }
     
-    public Error? Error { get; set; }
+    public Error? Error { get; init; }
     
     public bool IsError => Error is not null;
     
-    public DateTime TimeGenerated { get; set; }
+    public DateTime TimeGenerated { get; init; }
 
     [JsonConstructor]
     private Envelope(object? result, Error? error)

@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using DirectoryService.Shared.Errors;
 using IResult = Microsoft.AspNetCore.Http.IResult;
 
