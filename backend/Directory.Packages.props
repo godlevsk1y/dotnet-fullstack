@@ -34,5 +34,10 @@
     <PackageVersion Include="Serilog.Exceptions" Version="8.4.0" />
     <!--  DependencyInjection extensions  -->
     <PackageVersion Include="Scrutor" Version="7.0.0" />
+    <!--  Testing  -->
+    <PackageVersion Include="coverlet.collector" Version="6.0.4"/>
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+    <PackageVersion Include="xunit" Version="2.9.3"/>
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4"/>
   </ItemGroup>
 </Project>
