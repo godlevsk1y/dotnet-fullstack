@@ -1,5 +1,4 @@
 using DirectoryService.Infrastructure.Postgres;
-using DotNet.Testcontainers.Images;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -34,6 +33,12 @@ public class DirectoryServiceTestWebFactory : WebApplicationFactory<Program>, IA
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
+
+        await using var scope = Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<DirectoryServiceDbContext>();
+        
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.EnsureCreatedAsync();
     }
 
     public new async Task DisposeAsync()
