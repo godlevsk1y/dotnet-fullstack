@@ -74,7 +74,7 @@ public class DirectoryServiceTestWebFactory : WebApplicationFactory<Program>, IA
             options: new RespawnerOptions
             {
                 DbAdapter = DbAdapter.Postgres,
-                SchemasToExclude = ["public"],
+                SchemasToInclude = ["public"],
             }
         );
     }
