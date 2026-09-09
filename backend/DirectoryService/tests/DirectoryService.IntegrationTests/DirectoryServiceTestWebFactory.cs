@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Npgsql;
+using Respawn;
 using Testcontainers.PostgreSql;
 
 namespace DirectoryService.IntegrationTests;
@@ -18,6 +20,7 @@ public class DirectoryServiceTestWebFactory : WebApplicationFactory<Program>, IA
         .WithPassword("postgres")
         .Build();
 
+    private Respawner _respawner = null!;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -39,11 +42,40 @@ public class DirectoryServiceTestWebFactory : WebApplicationFactory<Program>, IA
         
         await dbContext.Database.EnsureDeletedAsync();
         await dbContext.Database.EnsureCreatedAsync();
+
+        await InitializeRespawner();
     }
 
     public new async Task DisposeAsync()
     {
         await _dbContainer.StopAsync();
         await _dbContainer.DisposeAsync();
+    }
+
+    public async Task ResetDatabaseAsync()
+    {
+        await using var connection 
+            = new NpgsqlConnection(_dbContainer.GetConnectionString());
+
+        await connection.OpenAsync();
+
+        await _respawner.ResetAsync(connection);
+    }
+
+    private async Task InitializeRespawner()
+    {
+        await using var connection = 
+            new NpgsqlConnection(_dbContainer.GetConnectionString());
+
+        await connection.OpenAsync();
+        
+        _respawner = await Respawner.CreateAsync(
+            connection,
+            options: new RespawnerOptions
+            {
+                DbAdapter = DbAdapter.Postgres,
+                SchemasToExclude = ["public"],
+            }
+        );
     }
 }
