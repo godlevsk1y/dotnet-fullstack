@@ -30,6 +30,14 @@ public class CreateDepartmentTests : IClassFixture<DirectoryServiceTestWebFactor
         
         Assert.Equal(201, (int)response.StatusCode);
         Assert.NotEmpty(await response.Content.ReadAsStringAsync());
+        
+        var envelope = await response.Content.ReadFromJsonAsync<Envelope<DepartmentDto>>();
+        Assert.NotNull(envelope);
+        Assert.NotNull(envelope.Result);
+        Assert.False(envelope.IsError);
+        Assert.Equal("Product Team", envelope.Result.Name);
+        Assert.Equal("product-team", envelope.Result.Slug);
+        Assert.NotEqual(Guid.Empty, envelope.Result.Id);
     }
 
     [Fact]
@@ -53,6 +61,27 @@ public class CreateDepartmentTests : IClassFixture<DirectoryServiceTestWebFactor
         Assert.NotNull(envelope);
         Assert.True(envelope.IsError);
         Assert.Equal("location.not.found", envelope.Error!.Messages[0].Code);
+    }
+
+    [Fact]
+    public async Task CreateDepartment_ShouldReturnBadRequest_WhenSlugIsInvalid()
+    {
+        var request = new CreateDepartmentRequest(
+            Name: "Product Team",
+            Slug: "123d\nINVALID-SLUG\n\t",
+            LocationIds: [],
+            ParentId: null
+        );
+
+        var response = await _client.PostAsJsonAsync("api/departments", request);
+        
+        Assert.Equal(400, (int)response.StatusCode);
+        Assert.NotEmpty(await response.Content.ReadAsStringAsync());
+        
+        var envelope = await response.Content.ReadFromJsonAsync<Envelope<DepartmentDto>>();
+        Assert.NotNull(envelope);
+        Assert.True(envelope.IsError);
+        Assert.Equal("slug.invalid", envelope.Error!.Messages[0].Code);
     }
     
     
