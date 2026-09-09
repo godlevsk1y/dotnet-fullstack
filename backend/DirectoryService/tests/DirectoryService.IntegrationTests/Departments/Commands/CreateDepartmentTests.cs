@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 using DirectoryService.Contracts.Departments;
 using DirectoryService.Web.Results;
 
-namespace DirectoryService.IntegrationTests.Departments;
+namespace DirectoryService.IntegrationTests.Departments.Commands;
 
 public class CreateDepartmentTests : IClassFixture<DirectoryServiceTestWebFactory>, IAsyncLifetime
 {
