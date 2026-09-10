@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
 using DirectoryService.Contracts.Departments;
 using DirectoryService.Contracts.Departments.QueryContracts;
-using DirectoryService.Domain.ValueObjects;
 using DirectoryService.Shared.Results;
 using DirectoryService.Web.Results;
 
@@ -56,7 +55,73 @@ public class GetDepartmentListTests : IClassFixture<DirectoryServiceTestWebFacto
         Assert.NotEmpty(envelope.Result.Results);
         Assert.Equal("business-team", envelope.Result.Results.FirstOrDefault()!.Slug);
     }
+    
+    [Fact]
+    public async Task GetDepartmentList_ShouldReturnEmptyList_WhenDepartmentsNotFound()
+    {
+        await CreateMockDepartmentsAsync();
+        
+        var queryParams = new
+        {
+            Search = "not exising search query",
+            SortBy = "name",
+            SortDirection = "asc",
+            Page = 1,
+            PageSize = 10,
+        };
+        
+        var response = await _client.GetAsync($"api/departments?" +
+                                              $"search={queryParams.Search}" +
+                                              $"&sortBy={queryParams.SortBy}" +
+                                              $"&sortDirection={queryParams.SortDirection}" +
+                                              $"&page={queryParams.Page}" +
+                                              $"&pageSize={queryParams.PageSize}");
+        
+        Assert.Equal(200, (int)response.StatusCode);
+        Assert.NotEmpty(await response.Content.ReadAsStringAsync());
+        
+        var envelope = await response.Content.ReadFromJsonAsync<Envelope<PagedResult<DepartmentListItemDto>>>();
+        Assert.NotNull(envelope);
+        Assert.False(envelope.IsError);
+        Assert.NotNull(envelope.Result);
+        
+        Assert.Equal(0, envelope.Result.TotalCount);
+        Assert.Equal(1, envelope.Result.Page);
+        Assert.Equal(10, envelope.Result.PageSize);
+        
+        Assert.Empty(envelope.Result.Results);
+    }
 
+    [Fact]
+    public async Task GetDepartmentList_ShouldReturnBadRequest_WhenRequestIsInvalid()
+    {
+        var queryParams = new
+        {
+            Search = "team",
+            SortBy = "name",
+            SortDirection = "invalid direction",
+            Page = 1,
+            PageSize = 10,
+        };
+        
+        var response = await _client.GetAsync($"api/departments?" +
+                                              $"search={queryParams.Search}" +
+                                              $"&sortBy={queryParams.SortBy}" +
+                                              $"&sortDirection={queryParams.SortDirection}" +
+                                              $"&page={queryParams.Page}" +
+                                              $"&pageSize={queryParams.PageSize}");
+        
+        Assert.Equal(400, (int)response.StatusCode);
+        Assert.NotEmpty(await response.Content.ReadAsStringAsync());
+        
+        var envelope = await response.Content.ReadFromJsonAsync<Envelope<PagedResult<DepartmentListItemDto>>>();
+        Assert.NotNull(envelope);
+        Assert.True(envelope.IsError);
+        Assert.NotNull(envelope.Error);
+        Assert.Equal("departments.sort.direction.invalid", envelope.Error.Messages[0].Code);
+    }
+    
+    
     private async Task CreateMockDepartmentsAsync()
     {
         CreateDepartmentRequest[] requests =
