@@ -1,3 +1,5 @@
+using System.Data;
+using DirectoryService.Core.Database;
 using DirectoryService.Infrastructure.Postgres;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -27,9 +29,13 @@ public class DirectoryServiceTestWebFactory : WebApplicationFactory<Program>, IA
         builder.ConfigureTestServices(services =>
         {
             services.RemoveAll<DirectoryServiceDbContext>();
+            services.RemoveAll<IDbConnectionFactory>();
 
             services.AddDbContext<DirectoryServiceDbContext>(options =>
                 options.UseNpgsql(_dbContainer.GetConnectionString()));
+
+            services.AddScoped<IDbConnectionFactory>(_ =>
+                new TestDbConnectionFactory(_dbContainer.GetConnectionString()));
         });
     }
 
@@ -83,5 +89,23 @@ public class DirectoryServiceTestWebFactory : WebApplicationFactory<Program>, IA
                 SchemasToInclude = ["public"],
             }
         );
+    }
+
+    private sealed class TestDbConnectionFactory(string connectionString) : IDbConnectionFactory
+    {
+        public async Task<IDbConnection> OpenConnectionAsync(CancellationToken cancellationToken)
+        {
+            var connection = new NpgsqlConnection(connectionString);
+            try
+            {
+                await connection.OpenAsync(cancellationToken);
+                return connection;
+            }
+            catch
+            {
+                await connection.DisposeAsync();
+                throw;
+            }
+        }
     }
 }
